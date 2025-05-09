@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>BearHive - English Practice</title>
+    </head>
+    <body>
+        <div th:fragment="content">
+            <div class="content">
+                <div class="content-header">
+                    <div>
+                        <h1>Dashboard</h1>
+                        <p>Overview</p>
+                    </div>
+                </div>
+                <div class="stats">
+                    <div class="stat-card">
+                        <h3>Total Users</h3>
+                        <p class="stat-value">32</p>
+                        <p class="stat-change positive">+2.5% from last week</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Tests</h3>
+                        <p class="stat-value">102</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Flashcards</h3>
+                        <p class="stat-value">211</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Dictations</h3>
+                        <p class="stat-value">75</p>
+                    </div>
+                </div>
+                <div class="charts">
+                    <div class="chart-card">
+                        <h3>Test Score Overview</h3>
+                        <p>Average score of each test</p>
+                        <div class="histogram">
+                            <div class="bar" style="height: 20px; background-color: #fdf8c6;"></div>
+                            <div class="bar" style="height: 30px; background-color: #faf5a2;"></div>
+                            <div class="bar" style="height: 40px; background-color: #fbf27c;"></div>
+                            <div class="bar" style="height: 60px; background-color: #f9ed61;"></div>
+                            <div class="bar" style="height: 50px; background-color: #faea49;"></div>
+                            <div class="bar" style="height: 80px; background-color: #f3d749;"></div>
+                            <div class="bar" style="height: 90px; background-color: #ebbf44;"></div>
+                            <div class="bar" style="height: 70px; background-color: #e4a842;"></div>
+                        </div>
+                        <div class="y-axis">
+                            <span>R180000</span>
+                            <span>R135000</span>
+                            <span>R90000</span>
+                            <span>R45000</span>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Recent Users' Activity</h3>
+                        <p>Latest test scores</p>
+                        <div class="transaction-list">
+                            <div class="transaction-item">
+                                <span class="user-initial">T</span>
+                                <div>
+                                    <p>Thabo Mbeki</p>
+                                    <span>2023-11-14</span>
+                                </div>
+                                <span class="amount positive">IELTS 7.5</span>
+                            </div>
+                            <div class="transaction-item">
+                                <span class="user-initial">N</span>
+                                <div>
+                                    <p>Nomzamo Mbatha</p>
+                                    <span>2023-11-13</span>
+                                </div>
+                                <span class="amount negative">TOEIC 550</span>
+                            </div>
+                            <div class="transaction-item">
+                                <span class="user-initial">S</span>
+                                <div>
+                                    <p>Siya Kolisi</p>
+                                    <span>2023-11-12</span>
+                                </div>
+                                <span class="amount positive">TNTHPT 9.2</span>
+                            </div>
+                            <div class="transaction-item">
+                                <span class="user-initial">T</span>
+                                <div>
+                                    <p>Trevor Noah</p>
+                                    <span>2023-11-11</span>
+                                </div>
+                                <span class="amount negative">TNTHPT 7.4</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

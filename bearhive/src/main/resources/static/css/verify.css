@@ -1,0 +1,91 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.form-box {
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  border-left: 4px solid var(--primary);
+}
+
+.form-box h2 {
+  margin-bottom: 10px;
+}
+
+.input-group {
+  margin: 30px 0;
+}
+
+.input-group input {
+  text-align: center;
+  letter-spacing: 4px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.submit-btn {
+  margin-bottom: 15px;
+}
+
+.resend-btn {
+  background-color: transparent;
+  color: var(--primary-dark);
+  box-shadow: none;
+  font-weight: 500;
+}
+
+.resend-btn:hover {
+  background-color: transparent;
+  color: var(--primary);
+  text-decoration: underline;
+  transform: none;
+  box-shadow: none;
+}
+
+.cloud-image {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  opacity: 0.7;
+  animation: float 6s ease-in-out infinite;
+}
+
+.cloud-image img {
+  max-width: 250px;
+  height: auto;
+}
+
+.cloud-image-2 {
+  position: fixed;
+  top: 10%;
+  right: 5%;
+  z-index: -1;
+  opacity: 0.5;
+  animation: float 8s ease-in-out infinite 1s;
+}
+
+.cloud-image-2 img {
+  max-width: 200px;
+  height: auto;
+}
+
+/* Decorative elements */
+.form-box::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  width: 100px;
+  height: 100px;
+  background-color: rgba(255, 193, 7, 0.15);
+  border-radius: 50%;
+  z-index: -1;
+}

@@ -1,0 +1,155 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .form-box {
+    text-align: center;
+    max-width: 450px;
+    width: 100%;
+    border-left: 4px solid var(--primary);
+    padding: 40px;
+  }
+  
+  .form-box::before {
+    display: none;
+  }
+  
+  .form-box h2 {
+    margin-bottom: 24px;
+    color: var(--dark);
+    font-size: 28px;
+    text-align: center;
+  }
+  
+  .input-group {
+    margin: 20px 0 30px;
+    text-align: left;
+  }
+  
+  .input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--dark);
+    font-weight: 500;
+    font-size: 14px;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    font-size: 16px;
+    transition: var(--transition);
+  }
+  
+  .input-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+  }
+  
+  .input-group input:last-child {
+    margin-bottom: 0;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--primary);
+    color: var(--dark);
+    border: none;
+    border-radius: var(--radius);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .submit-btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Password strength indicator */
+  .input-group input[type="password"] {
+    position: relative;
+  }
+  
+  .input-group input[type="password"]:focus {
+    border-bottom-width: 3px;
+  }
+  
+  /* Decorative elements */
+  .form-box::after {
+    content: "";
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 60px;
+    height: 60px;
+    background-color: rgba(255, 193, 7, 0.15);
+    border-radius: 50%;
+    z-index: -1;
+  }
+  
+  /* Password validation animation */
+  @keyframes validationPulse {
+    0% {
+      border-color: #ddd;
+    }
+    50% {
+      border-color: var(--primary);
+    }
+    100% {
+      border-color: #ddd;
+    }
+  }
+  
+  .password-match-indicator {
+    height: 4px;
+    width: 0;
+    background-color: var(--danger);
+    transition: all 0.3s ease;
+    margin-top: -16px;
+    margin-bottom: 16px;
+    border-radius: 2px;
+  }
+  
+  .password-match-indicator.matching {
+    background-color: var(--success);
+    width: 100%;
+  }
+  
+  .password-match-indicator.not-matching {
+    background-color: var(--danger);
+    width: 100%;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .form-box {
+      padding: 30px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .form-box {
+      padding: 20px;
+    }
+    
+    h2 {
+      font-size: 24px;
+    }
+  }
+  

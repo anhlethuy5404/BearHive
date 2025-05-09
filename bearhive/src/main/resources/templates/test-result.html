@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BearHive - English Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/test-result.css}">
+</head>
+
+<body>
+    <div th:insert="~{header :: header}"></div>
+
+    <div class="confetti-container" id="confetti-container"></div>
+    <div class="result-container">
+        <div class="result-card">
+            <div class="result-header">
+                <h1 class="congrats-title">Congratulations!</h1>
+                <p class="congrats-subtitle">You've completed the [[${test.title}]]</p>
+            </div>
+
+            <div class="result-body">
+                <div class="score-summary">
+                    <div class="score-item">
+                        <div class="score-value">7.5</div>
+                        <div class="score-label">OVERALL SCORE</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-value">34/40</div>
+                        <div class="score-label">CORRECT ANSWERS</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-value">85%</div>
+                        <div class="score-label">ACCURACY</div>
+                    </div>
+                </div>
+
+                <div class="badge-container">
+                    <div class="badge">7.5</div>
+                    <div class="badge-label">Band Score</div>
+                    <p class="achievement-text">Your performance places you in the top 15% of test takers!</p>
+                </div>
+
+                <div class="part-section" th:each="part, partStat : ${parts}">
+                    <h2 class="section-title" th:attr="data-target='answers-' + ${partStat.index}">[[${part.title}]]
+                        results
+                        <span class="toggle-icon fa fa-chevron-down"></span>
+                    </h2>
+                    <div class="answer-grid" th:id="'answers-' + ${partStat.index}">
+                        <div class="answer-item">
+                            <div class="answer-header">
+                                <span class="question-number">Question 1</span>
+                                <span class="status-icon status-correct">✓</span>
+                            </div>
+                            <div class="answer-text">
+                                <div class="correct-answer">James</div>
+                            </div>
+                        </div>
+                        <div class="answer-item">
+                            <div class="answer-header">
+                                <span class="question-number">Question 2</span>
+                                <span class="status-icon status-correct">✓</span>
+                            </div>
+                            <div class="answer-text">
+                                <div class="correct-answer">Australia</div>
+                            </div>
+                        </div>
+                        <div class="answer-item">
+                            <div class="answer-header">
+                                <span class="question-number">Question 3</span>
+                                <span class="status-icon status-incorrect">✗</span>
+                            </div>
+                            <div class="answer-text">
+                                <div class="label-correct">Correct:</div>
+                                <div class="correct-answer">June 15</div>
+                                <div class="your-answer">June 5</div>
+                            </div>
+                        </div>
+                        <div class="answer-item">
+                            <div class="answer-header">
+                                <span class="question-number">Question 4</span>
+                                <span class="status-icon status-correct">✓</span>
+                            </div>
+                            <div class="answer-text">
+                                <div class="correct-answer">4</div>
+                            </div>
+                        </div>
+                        <div class="answer-item">
+                            <div class="answer-header">
+                                <span class="question-number">Question 5</span>
+                                <span class="status-icon status-correct">✓</span>
+                            </div>
+                            <div class="answer-text">
+                                <div class="correct-answer">business</div>
+                            </div>
+                        </div>
+                        <div class="answer-item">
+                            <div class="answer-header">
+                                <span class="question-number">Question 6</span>
+                                <span class="status-icon status-correct">✓</span>
+                            </div>
+                            <div class="answer-text">
+                                <div class="correct-answer">apartment</div>
+                            </div>
+                        </div>
+                        <div class="answer-item">
+                            <div class="answer-header">
+                                <span class="question-number">Question 7</span>
+                                <span class="status-icon status-incorrect">✗</span>
+                            </div>
+                            <div class="answer-text">
+                                <div class="label-correct">Correct:</div>
+                                <div class="correct-answer">garage</div>
+                                <div class="your-answer">driveway</div>
+                            </div>
+                        </div>
+                        <div class="answer-item">
+                            <div class="answer-header">
+                                <span class="question-number">Question 8</span>
+                                <span class="status-icon status-correct">✓</span>
+                            </div>
+                            <div class="answer-text">
+                                <div class="correct-answer">shops</div>
+                            </div>
+                        </div>
+                        <div class="answer-item">
+                            <div class="answer-header">
+                                <span class="question-number">Question 9</span>
+                                <span class="status-icon status-correct">✓</span>
+                            </div>
+                            <div class="answer-text">
+                                <div class="correct-answer">Brighton</div>
+                            </div>
+                        </div>
+                        <div class="answer-item">
+                            <div class="answer-header">
+                                <span class="question-number">Question 10</span>
+                                <span class="status-icon status-correct">✓</span>
+                            </div>
+                            <div class="answer-text">
+                                <div class="correct-answer">450</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="action-buttons">
+                    <a href="#" class="btn btn-primary">View Full Results</a>
+                    <a th:href="@{/test}" class="btn btn-outline">Try Another Test</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sectionTitles = document.querySelectorAll('.section-title');
+
+            sectionTitles.forEach((title) => {
+                title.addEventListener('click', function () {
+                    const targetId = this.getAttribute('data-target');
+                    const answerGrid = document.getElementById(targetId);
+                    const toggleIcon = this.querySelector('.toggle-icon');
+
+                    answerGrid.classList.toggle('collapsed');
+                    toggleIcon.classList.toggle('up');
+                });
+            });
+        });
+    </script>
+    <script th:src="@{/js/congrats.js}"></script>
+    <script th:src="@{../js/header.js}"></script>
+</body>
+
+</html>

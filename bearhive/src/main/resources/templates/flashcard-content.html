@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BearHive - English Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/flashcard-content.css}">
+</head>
+
+<body>
+    <div th:insert="~{header :: header}"></div>
+    <div class="container">
+        <h1>Luyện tập: <span th:text="${flashcard.title}"></span></h1>
+
+        <div class="top-links">
+            <a th:href="@{/flashcard/{id}(id=${flashcard.id})}">
+                << Xem tất cả</a>
+        </div>
+
+        <div class="flashcard-container">
+            <div th:each="word : ${words}" class="flashcard">
+                <div class="flippable">
+                    <div class="flashcard-front">
+                        <div class="word">[[${word.word}]]
+                            <button class="play-audio-btn" th:data-word="${word.word}">
+                                <i class="fa fa-volume-up"></i>
+                            </button>
+                        </div>
+                        <div class="pronunciation" th:text="'(' + ${word.type} + ') ' + ${word.pronunciation}"></div>
+                        <div class="flip-icon">↻</div>
+                    </div>
+                    <div class="flashcard-back">
+                        <div class="content">
+                            <div class="definition">Định nghĩa:</div>
+                            <div th:text="${word.meaning}"></div>
+                            <div class="example">
+                                <div>Ví dụ:</div>
+                                <ul>
+                                    <li th:text="${word.example}"></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="image-container">
+                            <img class="gift-image" th:src="${word.image}">
+                        </div>
+                        <div class="flip-icon">↻</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-controls">
+            <div class="navigation-buttons">
+                <button id="prev-word" class="nav-button prev-button">←</button>
+                <button id="next-word" class="nav-button next-button">→</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.querySelectorAll('.flippable').forEach(card => {
+            card.addEventListener('click', function () {
+                this.classList.toggle('flipped');
+            });
+        });
+        function speakWord(word) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-US';
+                window.speechSynthesis.cancel();
+                window.speechSynthesis.speak(utterance);
+            } else {
+                console.log('Web Speech API không được hỗ trợ.');
+            }
+        }
+        const flashcards = document.querySelectorAll('.flashcard');
+        let currentIndex = 0;
+
+        function showFlashcard(index) {
+            flashcards.forEach((flashcard, i) => {
+                flashcard.style.display = i === index ? 'block' : 'none';
+            });
+            const word = flashcards[index].querySelector('.play-audio-btn').getAttribute('data-word');
+            speakWord(word);
+        }
+        
+        showFlashcard(currentIndex);
+
+        // Nút phát âm
+        document.querySelectorAll('.play-audio-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const word = button.getAttribute('data-word');
+                speakWord(word); // Phát âm lại khi nhấn nút
+            });
+        });
+
+        document.getElementById('prev-word').addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showFlashcard(currentIndex);
+            }
+        });
+
+        document.getElementById('next-word').addEventListener('click', () => {
+            if (currentIndex < flashcards.length - 1) {
+                currentIndex++;
+                showFlashcard(currentIndex);
+            }
+        });
+
+        //prev và next bằng bàn phím
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowLeft') {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    showFlashcard(currentIndex);
+                }
+            } else if (event.key === 'ArrowRight') {
+                if (currentIndex < flashcards.length - 1) {
+                    currentIndex++;
+                    showFlashcard(currentIndex);
+                }
+            }
+        });
+
+        showFlashcard(currentIndex);
+    </script>
+    <script th:src="@{../js/header.js}"></script>
+</body>
+
+</html>

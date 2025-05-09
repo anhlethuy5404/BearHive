@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" th:href="@{/css/styles_for_login.css}">
+    <link rel="stylesheet" th:href="@{/css/signup.css}">
+</head>
+<body>
+    <div class="message  error" th:if="${message!=null and message.contains('Email đã được đăng kí!')}">[[${message}]]</div>
+    <div class="message success" th:if="${message!=null and message.contains('Đăng kí thành công!')}">[[${message}]]</div>
+    <div class="form-container">
+        <h2>Create Account</h2>
+        <p>Please fill in your details</p>
+        <form th:action="@{/signup}" method="post" role="form" th:object="${user}">
+            <div class="row">
+                <div class="column">
+                    <label for="fullName">Full Name</label>
+                    <input th:field="*{fullname}" type="text" name="fullname" id="fullName" placeholder="Enter your full name" required>
+                </div>
+                <div class="column">
+                    <label for="location">Location</label>
+                    <select th:field="*{location}" required>
+                        <th:block th:replace="fragments/provinces :: provinceOptions"></th:block>
+                    </select>
+                </div>
+            </div>
+        
+            <div class="row">
+                <div class="column">
+                    <label for="birthday">Birthday</label>
+                    <input th:field="*{birthday}" type="date" name="birthday" required>
+                </div>
+                <div class="column">
+                    <label for="gender">Gender</label>
+                    <select th:field="*{gender}" id="gender" name="gender" required>
+                        <option value="">-- Chọn giới tính --</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                </div>
+            </div>
+        
+            <label for="signupEmail">Email Address</label>
+            <input th:field="*{email}" type="email" name="email" id="signupEmail" placeholder="Enter your email" required>
+        
+            <label for="signupPassword">Password</label>
+            <input th:field="*{password}" type="password" name="password" id="signupPassword" placeholder="Create a password" required>
+        
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+        
+            <button type="submit">Create Account</button>
+            <p>Already have an account? <a href="/login">Sign In</a></p>
+        </form>        
+    </div>
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
+    <div class="shape shape-5"></div>
+
+    <script th:src="@{/js/background-patterns.js}"></script>
+    <script th:src="@{/js/form-animations.js}"></script>
+    <script th:src="@{/js/password-validation.js}"></script>
+</body>
+</html>

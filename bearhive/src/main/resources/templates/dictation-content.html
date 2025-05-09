@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BearHive - English Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/dictation-content.css}">
+</head>
+
+<body>
+    <div th:insert="~{header :: header}"></div>
+    <div class="container">
+        <div class="main-content">
+            <div class="practice-header">
+                <h1 class="practice-title">[[${dictation.title}]]<span
+                        class="level-badge">[[${dictation.difficulty}]]</span></h1>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" data-tab="dictation">Dictation</div>
+                <div class="tab" data-tab="transcript">Full transcript</div>
+            </div>
+
+            <div class="tab-content">
+                <!-- Dictation Tab Content -->
+                <div class="dictation-container">
+                    <div class="navigation-controls">
+                        <div class="pagination">
+                            <div class="nav-arrow" onClick="navigateSentence(-1)">&#8592;</div>
+                            <div class="pagination-text"
+                                th:text="${sentenceIndex + 1} + ' / ' + ${#lists.size(sentences)}"></div>
+                            <div class="nav-arrow" onClick="navigateSentence(1)">&#8594;</div>
+                        </div>
+                    </div>
+
+                    <div class="audio-player">
+                        <button class="play-btn" onclick="playAudio()">▶</button>
+                        <div class="time-display" id="timeDisplay"></div>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
+                        <select class="playback-speed" onchange="changePlaybackSpeed(this.value)">
+                            <option value="0.5">0.5x</option>
+                            <option value="1" selected>1x</option>
+                            <option value="1.5">1.5x</option>
+                            <option value="2">2x</option>
+                        </select>
+                    </div>
+
+                    <div class="hint-container" th:if="${sentences[sentenceIndex]?.hint}">
+                        <span class="hint-icon">💡</span>
+                        <span class="hint-text">Hint:</span>
+                        <span class="hint-value" th:text="${sentences[sentenceIndex]?.hint}"></span>
+                    </div>
+
+                    <div class="input-container">
+                        <textarea class="dictation-input"
+                            style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"
+                            placeholder="Type what you hear..." id="userInput"></textarea>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn check-btn" onclick="checkAnswer()">Check</button>
+                        <button class="btn show-answer-btn" id="showAnswerBtn" style="display: none;"
+                            onclick="showAnswer()">Show Answer</button>
+                    </div>
+                    <div class="result-container" id="resultContainer" style="margin-top: 10px;"></div>
+                </div>
+
+                <!-- Transcript Tab Content (hidden by default) -->
+                <div class="transcript-container" style="display: none;">
+                    <div class="transcript-left">
+                        <div class="translation-selector">
+                            <span class="translation-label">Translation</span>
+                            <select class="language-select">
+                                <option value="none">None</option>
+                                <option value="vietnamese">Vietnamese</option>
+                            </select>
+                        </div>
+
+                        <div class="audio-player">
+                            <button class="play-btn" onclick="playFullAudio()">▶</button>
+                            <div class="time-display" id="fullTimeDisplay"></div>
+                            <div class="progress-container">
+                                <div class="progress-bar" id="fullProgressBar"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="transcript-right">
+                        <div class="sentence-item" th:each="sentence : ${sentences}">
+                            <div class="sentence-text">
+                                <span th:text="${sentence.text}"></span>
+                                <span class="translation-text"
+                                    th:id="'translationTextRight_' + ${sentence.orderNumber}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        let currentSentenceIndex = /*[[${sentenceIndex}]]*/ 0;
+        const totalSentences = /*[[${#lists.size(sentences)}]]*/ 0;
+        const dictationId = /*[[${dictation.id}]]*/ 0;
+        let audio = null;
+        let fullAudio = null;
+        const sentenceAudioUrls = /*[[${sentences.![audio]}]]*/[];
+        const fullAudioUrl = /*[[${dictation.audio}]]*/ '';
+        const vietTransList = /*[[${sentences.![vietTrans]}]]*/[];
+        const textList = /*[[${sentences.![text]}]]*/[];
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content > div');
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const activeTab = urlParams.get('tab') || 'dictation';
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            tabs.forEach((tab, index) => {
+                const tabName = tab.getAttribute('data-tab');
+                if (tabName === activeTab) {
+                    tab.classList.add('active');
+                    tabContents[index].style.display = 'flex';
+                } else {
+                    tabContents[index].style.display = 'none';
+                }
+
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    tabContents.forEach(content => {
+                        content.style.display = 'none';
+                    });
+                    tabContents[index].style.display = 'flex';
+                    const url = new URL(window.location);
+                    url.searchParams.set('tab', tabName);
+                    window.history.pushState({}, '', url);
+                });
+            });
+
+            // Điều hướng bằng phím mũi tên
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'ArrowLeft') {
+                    navigateSentence(-1);
+                } else if (event.key === 'ArrowRight') {
+                    navigateSentence(1);
+                }
+            });
+
+            // Khởi tạo audio cho câu hiện tại
+            loadAudio();
+            loadFullAudio();
+            //cập nhật bản dịch
+            const languageSelect = document.querySelector('.language-select');
+            const savedLanguage = localStorage.getItem('selectedLanguage');
+            if (savedLanguage) {
+                languageSelect.value = savedLanguage;
+            }
+            updateTranslationRight(languageSelect.value);
+
+            // Lưu trạng thái translation khi thay đổi
+            languageSelect.addEventListener('change', function () {
+                localStorage.setItem('selectedLanguage', this.value);
+                updateTranslationRight(this.value);
+            });
+        });
+
+        function navigateSentence(direction) {
+            currentSentenceIndex += direction;
+            if (currentSentenceIndex < 0) currentSentenceIndex = 0;
+            if (currentSentenceIndex >= totalSentences) currentSentenceIndex = totalSentences - 1;
+            const languageSelect = document.querySelector('.language-select');
+            updateTranslationRight(languageSelect.value);
+            document.getElementById('showAnswerBtn').style.display = 'none';
+            updateSentence();
+        }
+        function updateSentence() {
+            const url = new URL(window.location);
+            url.searchParams.set('sentenceIndex', currentSentenceIndex);
+            const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
+            url.searchParams.set('tab', activeTab);
+            const languageSelect = document.querySelector('.language-select');
+            url.searchParams.set('language', languageSelect.value);
+            window.location.href = url.toString();
+        }
+
+        function loadAudio() {
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+            if (!sentenceAudioUrls[currentSentenceIndex]) {
+                console.error('Audio URL not found for sentence ' + (currentSentenceIndex + 1));
+                return;
+            }
+            audio = new Audio(sentenceAudioUrls[currentSentenceIndex]);
+            audio.addEventListener('timeupdate', updateProgress);
+            audio.addEventListener('loadedmetadata', updateDuration);
+            audio.addEventListener('ended', function () {
+                document.querySelector('.dictation-container .play-btn').textContent = '▶';
+            });
+            audio.onerror = function () {
+                alert('Error loading audio for sentence ' + (currentSentenceIndex + 1));
+            };
+        }
+
+        function loadFullAudio() {
+            if (fullAudio) {
+                fullAudio.pause();
+                fullAudio.currentTime = 0;
+            }
+            if (!fullAudioUrl) {
+                console.error('Full audio URL not found');
+                return;
+            }
+            fullAudio = new Audio(fullAudioUrl);
+            fullAudio.addEventListener('timeupdate', updateFullProgress);
+            fullAudio.addEventListener('loadedmetadata', updateFullDuration);
+            fullAudio.addEventListener('ended', function () {
+                document.querySelector('.transcript-container .play-btn').textContent = '▶';
+            });
+            fullAudio.onerror = function () {
+                alert('Error loading full audio');
+            };
+        }
+
+        function playAudio() {
+            if (!audio) {
+                loadAudio();
+                return;
+            }
+            const playBtn = document.querySelector('.dictation-container .play-btn');
+            if (audio.paused) {
+                audio.play();
+                playBtn.textContent = '⏸';
+            } else {
+                audio.pause();
+                playBtn.textContent = '▶';
+            }
+        }
+
+        function playFullAudio() {
+            if (!fullAudio) {
+                loadFullAudio();
+                return;
+            }
+            const playBtn = document.querySelector('.transcript-container .play-btn');
+            if (fullAudio.paused) {
+                fullAudio.play();
+                playBtn.textContent = '⏸';
+            } else {
+                fullAudio.pause();
+                playBtn.textContent = '▶';
+            }
+        }
+
+        function playSentence(orderNumber) {
+            currentSentenceIndex = orderNumber - 1;
+            loadAudio();
+            playAudio();
+            updateSentence();
+        }
+
+        function changePlaybackSpeed(speed) {
+            if (audio) {
+                audio.playbackRate = parseFloat(speed);
+            }
+        }
+
+        function updateProgress() {
+            const progressBar = document.getElementById('progressBar');
+            const timeDisplay = document.getElementById('timeDisplay');
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = progress + '%';
+            const current = formatTime(audio.currentTime);
+            const duration = formatTime(audio.duration);
+            timeDisplay.textContent = `${current} / ${duration}`;
+        }
+
+        function updateFullProgress() {
+            const progressBar = document.getElementById('fullProgressBar');
+            const timeDisplay = document.getElementById('fullTimeDisplay');
+            const progress = (fullAudio.currentTime / fullAudio.duration) * 100;
+            progressBar.style.width = progress + '%';
+            const current = formatTime(fullAudio.currentTime);
+            const duration = formatTime(fullAudio.duration);
+            timeDisplay.textContent = `${current} / ${duration}`;
+        }
+
+        function updateDuration() {
+            const timeDisplay = document.getElementById('timeDisplay');
+            const duration = formatTime(audio.duration);
+            timeDisplay.textContent = `0:00 / ${duration}`;
+        }
+
+        function updateFullDuration() {
+            const timeDisplay = document.getElementById('fullTimeDisplay');
+            const duration = formatTime(fullAudio.duration);
+            timeDisplay.textContent = `0:00 / ${duration}`;
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function updateTranslationRight(language) {
+            for (let i = 0; i < totalSentences; i++) {
+                const translationText = document.getElementById(`translationTextRight_${i + 1}`);
+                if (language === 'none') {
+                    translationText.textContent = '';
+                } else if (language === 'vietnamese') {
+                    translationText.textContent = vietTransList[i] || '';
+                }
+            }
+        }
+
+        function removePunctuation(text) {
+            return text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?\[\]]/g, '').replace(/\s+/g, ' ').trim();
+        }
+        function checkAnswer() {
+            const userInput = document.getElementById('userInput').value.trim();
+            const correctText = textList[currentSentenceIndex].trim();
+            const cleanUserInput = removePunctuation(userInput);
+            const cleanCorrectText = removePunctuation(correctText);
+            if (cleanUserInput.toLowerCase() === cleanCorrectText.toLowerCase()) {
+                resultContainer.innerHTML = `
+                    <div class="result-correct">You are correct!</div>
+                    <div class="result-message">${correctText}</div>
+                `;
+                document.getElementById('showAnswerBtn').style.display = 'none';
+            } else {
+                const userWords = userInput.split(/\s+/);
+                const correctWords = correctText.split(/\s+/);
+                let firstWrongIndex = -1;
+                const cleanUserWords = cleanUserInput.split(/\s+/);
+                const cleanCorrectWords = cleanCorrectText.split(/\s+/);
+                for (let i = 0; i < Math.min(cleanUserWords.length, cleanCorrectWords.length); i++) {
+                    if (cleanUserWords[i].toLowerCase() !== cleanCorrectWords[i].toLowerCase()) {
+                        firstWrongIndex = i;
+                        break;
+                    }
+                }
+                if (firstWrongIndex === -1) {
+                    firstWrongIndex = Math.min(userWords.length, correctWords.length);
+                }
+
+                let resultMessage = correctWords.slice(0, firstWrongIndex).join(' ');
+                if (firstWrongIndex < correctWords.length) {
+                    if (resultMessage) resultMessage += ' ';
+                    resultMessage += correctWords[firstWrongIndex];
+                    if (firstWrongIndex < correctWords.length - 1) {
+                        resultMessage += ' ' + '***'.repeat(correctWords.length - firstWrongIndex - 1);
+                    }
+                }
+
+                resultContainer.innerHTML = `
+                    <div class="result-incorrect">Incorrect!</div>
+                    <div class="result-message">${resultMessage}</div>
+                `;
+                document.getElementById('showAnswerBtn').style.display = 'inline-block';
+            }
+        }
+        function showAnswer() {
+            const correctText = textList[currentSentenceIndex];
+            const resultContainer = document.getElementById('resultContainer');
+            resultContainer.innerHTML = `
+                <div class="result-correct">Correct answer:</div>
+                <div class="result-message">${correctText}</div>
+            `;
+            document.getElementById('showAnswerBtn').style.display = 'none'; // Ẩn nút sau khi hiển thị đáp án
+        }
+        /*]]>*/
+    </script>
+    <script th:src="@{../js/header.js}"></script>
+</body>
+
+</html>

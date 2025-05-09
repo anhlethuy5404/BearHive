@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BearHive - English Practice</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" th:href="@{/css/admin-info.css}">
+    </head>
+    <body>
+        <div th:fragment="content">
+            <div class="content">
+                <div class="content-header">
+                    <h1>Users</h1>
+                    <p>Manage user accounts</p>
+                </div>
+                <div class="table-controls">
+                    <div class="search-users">
+                        <i class="fa fa-search"></i>
+                        <input type="text" placeholder="Search users...">
+                    </div>
+                    <div class="table-actions">
+                        <button class="export-btn">Export</button>
+                        <button class="filter-btn">Filter</button>
+                    </div>
+                </div>
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Gender</th>
+                            <th>Location</th>
+                            <th>Joined Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${users}">
+                            <td th:text="${user.fullname}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="${user.gender}"></td>
+                            <td th:text="${user.location}"></td>
+                            <td th:text="${user.joinedDate}"></td>
+                            <td class="action">
+                                <button class="action-btn"><i class="fa fa-pencil"></i></button>
+                                <button class="action-btn"><i class="fa fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

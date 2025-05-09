@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BearHive - English Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/ielts-test.css}">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="header">
+                <h1 class="title" th:text="${test.title}"></h1>
+                <a th:href="@{/ielts/{id}(id=${test.id})}" class="exit-btn">Thoát</a>
+            </div>
+
+            <div class="recording-tabs">
+                <div th:each="part : ${parts}" th:classappend="${part.number == 1} ? 'active' : ''"
+                    th:text="${part.title}" th:data-part-id="${part.id}" th:data-audio-url="${part.audio}"
+                    class="recording-tab">
+                </div>
+            </div>
+
+            <div class="audio-player">
+                <audio id="audio-player" preload="auto"></audio>
+                <button class="play-btn">▶</button>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+                <div class="time-display">00:00</div>
+                <button class="volume-btn">🔊</button>
+                <div class="volume-slider">
+                    <input type="range" min="0" max="1" step="0.1" value="1" class="volume-control">
+                    <div class="volume-level"></div>
+                </div>
+            </div>
+            <div class="test-container">
+                <div class="test-content" th:each="part : ${parts}" th:id="'test-content-' + ${part.id}">
+                    <div class="instructions" th:each="gq : ${part.generalQuestions}">
+                        <div class="content-wrapper">
+                            <p class="instruction-text" th:text="${gq.description}" style="font-weight: 600;"></p>
+                            <h2 class="form-title" th:if="${gq.title} != null" th:text="${gq.title.toUpperCase()}"></h2>
+                            <div th:if="${gq.content!=null}" th:utext="${gq.content}"></div>
+                            <div th:each="question : ${gq.questions}">
+                                <div th:if="${question.getQuestionType() == 'MULTIPLE_CHOICE'}"
+                                    th:attr="data-question-id=${question.id}">
+                                    <p th:if="${question.questionText != null}"
+                                        th:text="${question.number} + '. ' + ${question.questionText}"></p>
+
+                                    <div th:if="${question.options != null}"
+                                        th:each="option, iter : ${question.options}" class="option-item">
+                                        <input class="radio-input" type="radio"
+                                            th:id="'option_' + ${question.id} + '_' + ${iter.index}"
+                                            th:name="'question_' + ${question.id}" th:value="${option}">
+                                        <label th:for="'option_' + ${question.id} + '_' + ${iter.index}"
+                                            th:text="${option}"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:if="${gq.image != null}">
+                                <img th:src="@{${gq.image}}" class="question-image" />
+                            </div>
+                        </div>
+                        <div class="answer-wrapper">
+                            <div class="answer-section" th:each="question : ${gq.questions}"
+                                th:if="${question.getQuestionType() == 'FILL_IN_BLANK'}">
+                                <div class="answer-item">
+                                    <div class="answer-number" th:text="${question.number}"></div>
+                                    <input type="text" class="answer-input" placeholder="Enter your answer"
+                                        th:attr="data-question-id=${question.id}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="next-btn hidden">
+                    Next
+                    <span>→</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="timer-section">
+                <div class="timer-label">Thời gian còn lại:</div>
+                <div class="timer-display"></div>
+                <input type="hidden" id="test-time-limit" th:value="${test.timeLimit}">
+            </div>
+
+            <button class="submit-btn">SUBMIT TEST</button>
+
+            <div class="note-yellow">Note: Bạn có thể click vào số thứ tự câu hỏi trong bài để review câu hỏi.</div>
+
+            <div class="recording-section" th:each="part, partStat : ${parts}">
+                <h3 class="recording-title" th:text="${part.title}"></h3>
+                <div class="question-grid">
+                    <th:block th:each="generalQuestion, generalQuestionStat : ${part.generalQuestions}">
+                        <button class="question-btn" th:each="question, questionStat : ${generalQuestion.questions}"
+                            th:classappend="${partStat.first && generalQuestionStat.first && questionStat.first} ? 'active' : ''"
+                            th:text="${question.number}" th:data-question-number="${question.number}"
+                            th:attr="data-part-id-2=${part.id}"></button>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- phần hidden -->
+    <div id="submitModal" class="modal">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+            <div class="modal-buttons">
+                <button id="confirmSubmit" class="modal-btn confirm-btn">Xác nhận</button>
+                <button id="cancelSubmit" class="modal-btn cancel-btn">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="testId" th:value="${test.id}">
+
+    <script th:src="@{/js/test.js}"></script>
+</body>
+
+</html>

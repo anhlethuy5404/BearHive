@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BearHive - English Practice</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" th:href="@{/css/admin-info.css}">
+    </head>
+    <body>
+        <div th:if="${error}" class="error-message">
+            <p th:text="${error}"></p>
+        </div>
+        <div th:fragment="content">
+            <div class="content">
+                <div class="back-to-tests">
+                    <i class="fa fa-arrow-left"></i>
+                    <a th:href="@{/admin/tests}">Back to Tests</a>
+                </div>
+                <div class="content-header">
+                    <div>
+                        <h1>Create test</h1>
+                        <p>Create a new English test</p>
+                    </div>
+                </div>
+                <div class="form-container">
+                    <form th:object="${test}" th:action="@{/admin/tests/create}" method="post" enctype="multipart/form-data">
+                        <div class="form-group inline-group">
+                            <div class="form-subgroup">
+                                <label for="title">Test Title</label>
+                                <input type="text" id="title" th:field="*{title}" placeholder="e.g. IELTS Academic Writing Practice" required>
+                            </div>
+                            <div class="form-subgroup">
+                                <label for="type">Test Type</label>
+                                <select id="type" th:field="*{type}" required>
+                                    <option value="" disabled selected>Select test type</option>
+                                    <option value="IELTS">IELTS</option>
+                                    <option value="TOEIC">TOEIC</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" th:field="*{description}" placeholder="Describe what this test covers and its purpose..." rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Difficulty Level</label>
+                            <div class="radio-group">
+                                <label>
+                                    <input type="radio" th:field="*{difficulty}" value="Beginner" required>
+                                    <span class="radio-label beginner">Beginner</span>
+                                </label>
+                                <label>
+                                    <input type="radio" th:field="*{difficulty}" value="Intermediate">
+                                    <span class="radio-label intermediate">Intermediate</span>
+                                </label>
+                                <label>
+                                    <input type="radio" th:field="*{difficulty}" value="Advanced">
+                                    <span class="radio-label advanced">Advanced</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group inline-group">
+                            <div class="form-subgroup">
+                                <label for="questions">Number of Questions</label>
+                                <input type="number" id="questions" th:field="*{questions}" placeholder="Enter a number between 1 and 100" min="1" max="100" required>
+                            </div>
+                            <div class="form-subgroup">
+                                <label for="coveredImage">Cover Image</label>
+                                <input type="file" id="imageFile" name="imageFile">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Create Test</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

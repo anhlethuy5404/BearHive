@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Test</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/test.css}">
+</head>
+
+<body>
+  <div th:insert="~{header :: header}"></div>
+  <div class="study-platform-container">
+    <header class="platform-header">
+      <div class="header-content">
+        <h1>Study Platform</h1>
+        <p class="subtitle">Master your subjects with interactive learning</p>
+        <div class="search-bar">
+          <input type="text" placeholder="Search for courses..." />
+          <button><i class="fa fa-search"></i></button>
+        </div>
+      </div>
+    </header>
+
+    <div class="subjects-grid">
+      <div th:each="test : ${tests}" class="subject-card">
+        <div class="subject-thumbnail">
+          <img class="set-image" th:src="${test.coveredImage}">
+          <div class="difficulty easy" th:if="${test.difficulty == 'Beginner'}">Beginner</div>
+          <div class="difficulty medium" th:if="${test.difficulty == 'Intermediate'}">Intermediate</div>
+          <div class="difficulty hard" th:if="${test.difficulty == 'Advanced'}">Advanced</div>
+        </div>
+        <div class="subject-content">
+          <h3 th:text="${test.title}"></h3>
+          <p th:text="${test.description}"></p>
+          <div class="stats">
+            <span><i class="fa fa-book"></i><span th:text="${test.questions}"></span> questions</span>
+            <span><i class="fa fa-users"></i> 10 students</span>
+          </div>
+          <a th:href="@{/ielts/{id}(id=${test.id})}" class="explore-btn">Luyện tập</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script th:src="@{../js/header.js}"></script>
+</body>
+
+</html>

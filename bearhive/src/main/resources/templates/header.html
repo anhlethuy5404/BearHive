@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>BearHive - English Practice</title>
+</head>
+<body>
+    <header th:fragment="header" class="header">
+        <nav class="nav-container">
+            <div class="nav-content">
+                <div class="logo">
+                    <img th:src="@{/image/bear/bear-toy-2.png}" alt="LearnEnglish Logo">
+                    <span>BearHive</span>
+                </div>
+                <div class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="/test">English Test</a>
+                    <a href="/flashcard">Flashcard</a>
+                    <a href="/dictation">Dictation</a>
+                    <div th:if="${session.loggedUser}" class="user-info">
+                        <img th:src="@{${session.loggedUser.avatar}}" class="avatar">
+                        <div class="dropdown">
+                            <span class="user-name" onclick="toggleMenu()">
+                                <span class="" th:text="${#strings.arraySplit(session.loggedUser.fullname, ' ')[#strings.arraySplit(session.loggedUser.fullname, ' ').length - 1]}" style="font-weight: 500;"></span>
+                            </span>
+                            <div class="dropdown-menu" id="dropdown-menu">
+                                <a th:if="${session.loggedUser.role == 'USER'}" th:href="@{/info/{id}(id=${session.loggedUser.id})}">Thông tin cá nhân</a>
+                                <a th:if="${session.loggedUser.role == 'ADMIN'}" th:href="@{/admin/dashboard}">Thông tin cá nhân</a>
+                                <a href="/logout">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                    <button th:unless="${session.loggedUser}" class="login-btn" onclick="window.location.href='/login'">Login</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+</body>
+</html>

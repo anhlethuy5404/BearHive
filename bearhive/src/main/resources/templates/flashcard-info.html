@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BearHive - English Practice</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" th:href="@{/css/header.css}">
+        <link rel="stylesheet" th:href="@{/css/flashcard-info.css}">
+    </head>
+    <body>
+        <div th:insert="~{header :: header}"></div>
+        <div class="container">
+            <img th:src="${flashcard.coveredImage}" class="coveredImage">
+
+            <h1 class="title">Flashcard: <span th:text="${flashcard.title}"></span></h1>
+            
+            <a th:href="@{/flashcard/{id}/content(id=${flashcard.id})}" class="practice-btn">Luyện tập Flashcard</a>
+            
+            <div class="list-info">List có <span th:text="${flashcard.questions}"></span> từ</div>
+            
+            <div th:each="word : ${words}" class="flashcard">
+                <div class="flashcard-content">
+                    <div class="word" th:text="${word.word} + ' (' + ${word.type} + ')'"><span class="pronunciation">/ ˈæbsənt /</span> <span class="sound-icon">🔊</span></div>
+                    <div class="definition">
+                        <div class="definition-title">Định nghĩa:</div>
+                        <div th:text="${word.meaning}"></div>
+                    </div>
+                    <div class="example">
+                        <div class="example-title">Ví dụ:</div>
+                        <ul>
+                            <li th:text="${word.example}"></li>
+                        </ul>
+                    </div>
+                </div>
+                <img th:src="${word.image}" class="flashcard-image">
+            </div>
+        </div>
+
+        <script th:src="@{../js/header.js}"></script>
+    </body>
+</html>

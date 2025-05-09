@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BearHive - English Practice</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" th:href="@{/css/info.css}">
+    </head>
+    <body>
+        <div class="profile-container">
+            <div class="cover-photo"></div>
+            <div class="profile-content">
+                <div class="avatar-section">
+                    <img th:src="${user.avatar}" alt="User Profile" class="avatar">
+                    <h1 class="user-name" th:text="${user.fullname}"></h1>
+                    <p class="user-info">
+                        <i class="fa fa-birthday-cake" th:text="' ' + ${user.birthday}"></i>
+                    </p>
+                </div>
+                <nav class="profile-nav">
+                    <ul>
+                        <li id="info-tab" onclick="switchTab('info')">User Info</li>
+                        <li id="activity-tab" onclick="switchTab('activity')">Activity History</li>
+                    </ul>
+                </nav>
+                <div class="tab-content">
+                    <div id="info-content" class="info-tab">
+                        <div class="info-card">
+                        <h3>Personal Information</h3>
+                        <div class="info-item">
+                            <span class="label">Email:</span>
+                            <span class="value" th:text="${user.email}"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Location:</span>
+                            <span class="value" th:text="${user.location}"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Join Date:</span>
+                            <span class="value" th:text="${user.joinedDate}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div id="activity-content" class="activity-tab hidden">
+                    <div class="timeline">
+                        <div class="activity-item">
+                            <div class="activity-date">03/06/2025</div>
+                            <div class="activity-content">
+                                <h4>Profile update</h4>
+                                <p>Update successfully</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                switchTab("info");
+            });
+            
+            function switchTab(tab) {
+                document.querySelectorAll(".profile-nav li").forEach(li => li.classList.remove("active"));
+                document.getElementById(`${tab}-tab`).classList.add("active");
+
+                document.querySelectorAll(".tab-content > div").forEach(div => div.classList.add("hidden"));
+                document.getElementById(`${tab}-content`).classList.remove("hidden");
+            }
+        </script>
+    </body>
+</html>

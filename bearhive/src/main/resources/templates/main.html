@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.1">
+    <title>BearHive - English Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{../css/header.css}">
+    <link rel="stylesheet" th:href="@{../css/main.css}">
+    <link rel="stylesheet" th:href="@{../css/footer.css}">
+</head>
+
+<body>
+    <div th:insert="~{header :: header}"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content animate-slide-left">
+                    <h1 class="hero-title">Master English with Confidence</h1>
+                    <p class="hero-description">
+                        Nền tảng toàn diện cho việc học tiếng Anh. Làm bài kiểm tra, xây dựng vốn từ vựng với thẻ ghi nhớ và cải thiện khả năng nghe thông qua các bài tập.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#" class="primary-btn">
+                            Bắt đầu ngay!
+                            <i class="fa fa-angle-right" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" style="margin-left: 0.5rem;">
+                            </i>
+                        </a>
+                        <a href="#" class="secondary-btn">Tìm hiểu thêm</a>
+                    </div>
+                </div>
+                <div class="hero-image animate-slide-right">
+                    <img th:src="@{/image/bg/unnamed.png}" alt="English Learning" width="400" height="400"
+                        class="animate-float">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section class="introduction">
+        <div class="container">
+            <div class="intro-header reveal">
+                <h2 class="intro-title">Đến với BearHive</h2>
+                <p class="intro-description">
+                    Điểm đến của bạn để học và cải thiện nâng cao Tiếng Anh
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature reveal">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">Học tập toàn diện</h3>
+                        <p class="feature-description">
+                            BearHive cung cấp phương pháp học tiếng Anh tổng thể, kết hợp nhiều phương pháp khác nhau 
+                            để giúp bạn phát triển đầy đủ các kỹ năng ngôn ngữ. Hệ thống học tập linh hoạt sẽ tự động 
+                            điều chỉnh theo trình độ của bạn, mang đến bài học phù hợp từ cơ bản đến nâng cao.
+                        </p>
+                    </div>
+                </div>
+                <div class="feature reveal delay-200">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">Bài kiểm tra Tiếng Anh</h3>
+                        <p class="feature-description">
+                            Các bài kiểm tra đánh giá toàn diện khả năng ngôn ngữ của bạn, bao gồm ngữ pháp, từ vựng, 
+                            đọc hiểu và nghe. Được thiết kế theo tiêu chuẩn các kỳ thi như TOEFL, IELTS, Cambridge, 
+                            giúp bạn chuẩn bị tốt hơn. Sau khi làm bài, bạn sẽ nhận được phản hồi chi tiết cùng gợi 
+                            ý học tập phù hợp.
+                        </p>
+                    </div>
+                </div>
+                <div class="feature reveal delay-300">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6V4H6v2l6 6Z"></path>
+                            <path d="m6 14 6 6 6-6"></path>
+                            <path d="M12 12v8"></path>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">Thẻ Flashcard</h3>
+                        <p class="feature-description">
+                            Hệ thống thẻ ghi nhớ giúp bạn mở rộng vốn từ vựng một cách hiệu quả, với hàng ngàn từ vựng 
+                            phân loại theo chủ đề, độ khó và tần suất sử dụng. Thuật toán lặp lại giãn cách giúp bạn 
+                            ghi nhớ lâu hơn, đồng thời cho phép tạo bộ thẻ tùy chỉnh theo mục tiêu cá nhân.
+                        </p>
+                    </div>
+                </div>
+                <div class="feature reveal delay-400">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                            <path
+                                d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">Luyện nghe bằng Dictation</h3>
+                        <p class="feature-description">
+                            Bài tập chính tả giúp cải thiện kỹ năng nghe và viết, với các đoạn ghi âm từ người bản xứ 
+                            có nhiều giọng khác nhau. Bạn sẽ luyện tập khả năng nghe và ghi lại chính xác những gì đã 
+                            nghe, kỹ năng quan trọng trong học thuật và giao tiếp hàng ngày.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="why-choose">
+        <div class="container">
+            <div class="intro-header reveal">
+                <h2 class="intro-title">Tại sao lại chọn BearHive?</h2>
+                <p class="intro-description">
+                    Khám phá những tính năng khiến BearHive nên là sự lựa chọn của bạn
+                </p>
+            </div>
+            <div class="features-cards">
+                <div class="feature-card reveal">
+                    <div class="feature-card-icon animate-pulse">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-card-title">Giao diện trực quan</h3>
+                    <p class="feature-card-description">
+                        BearHive được thiết kế tối giản, giúp người dùng dễ dàng làm quen ngay từ lần đầu sử dụng. 
+                        Các thao tác được sắp xếp hợp lý, mang đến trải nghiệm mượt mà. 
+                    </p>
+                </div>
+                <div class="feature-card reveal delay-200">
+                    <div class="feature-card-icon animate-pulse">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="8" r="7"></circle>
+                            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="feature-card-title">Chứng nhận tiến bộ</h3>
+                    <p class="feature-card-description">
+                        Theo dõi quá trình phát triển ngôn ngữ của bạn với hệ thống giám sát tiến độ toàn diện. 
+                        Bạn có thể nhận chứng chỉ và huy hiệu khi đạt được các mốc quan trọng, giúp bạn có bằng 
+                        chứng rõ ràng về sự tiến bộ của mình.
+                    </p>
+                </div>
+                <div class="feature-card reveal delay-400">
+                    <div class="feature-card-icon animate-pulse">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-card-title">Nguồn tài liệu phong phú</h3>
+                    <p class="feature-card-description">
+                        Truy cập thư viện học tập đa dạng, bao gồm bài viết, video, podcast, và bài tập tương 
+                        tác, giúp bạn nâng cao kiến thức về ngữ pháp, từ vựng và văn hóa Anh ngữ một cách hiệu quả.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div th:insert="~{footer :: footer}"></div>
+
+    <script th:src="@{../js/header.js}"></script>
+    <script>
+        // Reveal animations on scroll
+        function reveal() {
+            var reveals = document.querySelectorAll('.reveal');
+
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+
+        // Animated counters
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            const speed = 200;
+
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                let count = 0;
+
+                const updateCount = () => {
+                    const increment = target / speed;
+
+                    if (count < target) {
+                        count += increment;
+                        counter.innerText = Math.ceil(count);
+                        setTimeout(updateCount, 1);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+
+                // Only start animation when counter is in view
+                const observer = new IntersectionObserver((entries) => {
+                    if (entries[0].isIntersecting) {
+                        updateCount();
+                        observer.disconnect();
+                    }
+                });
+
+                observer.observe(counter);
+            });
+        }
+
+        // Initialize
+        window.addEventListener('scroll', reveal);
+        window.addEventListener('load', () => {
+            reveal();
+            animateCounters();
+        });
+    </script>
+</body>
+
+</html>

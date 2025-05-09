@@ -1,0 +1,305 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    overflow-x: hidden;
+}
+
+.study-platform-container {
+    margin-top: 70px;
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+.platform-header {
+    background: linear-gradient(135deg, #ffed87 0%, #ffd700 80%, #ffae00 100%);
+    padding: 4rem 2rem;
+    color: white;
+    text-align: center;
+}
+
+.header-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.platform-header h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+.search-bar {
+    display: flex;
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 1rem 2rem;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+}
+
+.search-bar button {
+    padding: 5px 20px;
+    background: #fbad41;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.search-bar button:hover {
+    background-color: rgb(234, 140, 0);
+}
+
+.search-bar button i {
+    font-size: 1.1rem;
+}
+
+.flashcard-sets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+    padding: 3.5rem 2.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.flashcard-sets::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.07), transparent);
+}
+
+.flashcard-set {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.flashcard-set:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.flashcard-set::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #ffed87, #ffd700);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.flashcard-set:hover::after {
+    transform: scaleX(1);
+}
+
+.set-thumbnail {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+}
+
+.set-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.flashcard-set:hover .set-image {
+    transform: scale(1.1);
+}
+
+.difficulty {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    text-transform: uppercase;
+}
+
+.easy {
+    background-color: #4caf50;
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+}
+
+.medium {
+    background-color: #ffa500;
+    background: linear-gradient(135deg, #ffa500, #ff8f00);
+}
+
+.hard {
+    background-color: #f44336;
+    background: linear-gradient(135deg, #f44336, #c62828);
+}
+
+.set-details {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.set-details h2 {
+    color: #3e2723;
+    margin: 0 0 12px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 1.4rem;
+    position: relative;
+    padding-bottom: 12px;
+    height: 80px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.set-details h2::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background-color: #ffd700;
+}
+
+.set-details p {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 18px;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 42px;
+}
+
+.set-meta {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 20px;
+    color: #666;
+    font-size: 14px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: 15px;
+    margin-top: auto;
+}
+
+.set-meta span {
+    display: flex;
+    align-items: center;
+}
+
+.set-meta span::before {
+    content: "•";
+    margin-right: 5px;
+    color: #ffd700;
+    font-size: 18px;
+}
+
+.practice-btn {
+    display: block;
+    padding: 14px;
+    background: linear-gradient(135deg, #ffd700, #ffae00);
+    color: #3e2723;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.practice-btn:hover {
+    background: linear-gradient(135deg, #ffae00, #ffd700);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+}
+
+.practice-btn::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 150%;
+    height: 150%;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: transform 0.6s, opacity 0.6s;
+}
+
+.practice-btn:hover::after {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .flashcard-sets {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        padding: 2rem 1.5rem;
+        gap: 1.5rem;
+    }
+
+    .set-details h2 {
+        font-size: 1.3rem;
+        height: 55px;
+        /* Slightly reduced for mobile */
+    }
+
+    .set-details p {
+        height: 38px;
+        /* Slightly reduced for mobile */
+    }
+}

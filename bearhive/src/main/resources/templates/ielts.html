@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BearHive - English Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/ielts.css}">
+</head>
+
+<body>
+    <div th:insert="~{header :: header}"></div>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <div class="tags">
+                    <span class="tag">[[${test.description}]]</span>
+                    <span class="tag">[[${test.type}]]</span>
+                </div>
+                <h1 class="title">[[${test.title}]] <span class="difficulty-badge">[[${test.difficulty}]]</span></h1>
+            </div>
+
+            <div class="card-body">
+                <div class="test-info">
+                    <div class="info-item">
+                        <span class="info-icon">⏱️</span>
+                        <span>Thời lượng: [[${test.timeLimit}]] minutes | [[${test.sections}]] sections |
+                            [[${test.questions}]] questions</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">👥</span>
+                        <span>944,115 người đã thử bài test này</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">💬</span>
+                        <span>2,672 bình luận</span>
+                    </div>
+                </div>
+
+                <div class="test-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">8.5</div>
+                        <div class="stat-label">Average Score</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">75%</div>
+                        <div class="stat-label">Completion Rate</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">4.8/5</div>
+                        <div class="stat-label">User Rating</div>
+                    </div>
+                </div>
+
+                <div class="nav-tabs">
+                    <div class="nav-tab active" data-tab="practice">Luyện tập</div>
+                    <div class="nav-tab" data-tab="discussion">Thảo luận</div>
+                </div>
+                <div class="tab-content" id="practice" style="display: block;">
+                    <div class="checkbox-group">
+                        <div class="checkbox-item" th:each="part : ${parts}">
+                            <label th:for="'recording' + ${part.number}" class="checkbox-label">
+                                [[${part.title}]]
+                                ([[${#aggregates.sum(part.generalQuestions.![#lists.size(questions)])}]] questions)
+                            </label>
+                            <div class="badge-container">
+                                <div th:each="generalQuestion : ${part.generalQuestions}">
+                                    <span class="badge" th:text="'#' + ${generalQuestion.type}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- <div class="progress-container">
+                    <div class="progress-title">
+                        <span>Your progress on this test</span>
+                        <span>65%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div> -->
+
+                    <div class="alert alert-info">
+                        <span class="alert-icon">ℹ️</span>
+                        <div>Bạn đã sẵn sàng để bắt đầu bài test chưa? Hãy nhấn nút Start để bắt đầu bài test ngay.
+                        </div>
+                    </div>
+
+                    <div class="start-test-container">
+                        <a th:href="@{/ielts/test/{id}(id=${test.id})}" class="btn btn-primary btn-lg">START</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- login modal -->
+            <div id="loginModal" class="modal">
+                <div class="modal-content">
+                    <span class="modal-close">&times;</span>
+                    <h2>Vui lòng đăng nhập</h2>
+                    <p>Bạn cần đăng nhập để bắt đầu test. Chưa có tài khoản? Đăng kí ngay!</p>
+                    <div class="modal-buttons">
+                        <a th:href="@{/login}" class="btn btn-primary">Đăng nhập</a>
+                        <a th:href="@{/signup}" class="btn btn-outline">Đăng ký</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="discussion" style="display: none;">
+                <form class="comment-form">
+                    <div class="form-group">
+                        <label class="checkbox-label">Đánh giá</label>
+                        <div class="star-rating-input">
+                            <span class="fa fa-star" data-value="1"></span>
+                            <span class="fa fa-star" data-value="2"></span>
+                            <span class="fa fa-star" data-value="3"></span>
+                            <span class="fa fa-star" data-value="4"></span>
+                            <span class="fa fa-star" data-value="5"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment-text" class="checkbox-label">Bình luận</label>
+                        <textarea id="comment-text" class="form-input" rows="4" placeholder="Viết bình luận của bạn..."
+                            required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Gửi bình luận</button>
+                </form>
+                <div class="comments-container">
+                    <div class="comment-item">
+                        <div class="comment-header">
+                            <span class="user-icon">JD</span>
+                            <div>
+                                <div class="comment-user">John Doe</div>
+                                <div class="star-rating">
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment-body">
+                            This test was really helpful for practicing my listening skills! The recordings were clear,
+                            and
+                            the questions were challenging but fair.
+                        </div>
+                        <div class="comment-footer">
+                            <span class="comment-date">April 28, 2025</span>
+                        </div>
+                    </div>
+
+                    <div class="comment-item">
+                        <div class="comment-header">
+                            <span class="user-icon">AS</span>
+                            <div>
+                                <div class="comment-user">Alice Smith</div>
+                                <div class="star-rating">
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment-body">
+                            Good practice test, but I found some questions in Recording 4 a bit confusing. Maybe add
+                            more
+                            explanations for those?
+                        </div>
+                        <div class="comment-footer">
+                            <span class="comment-date">April 27, 2025</span>
+                        </div>
+                    </div>
+
+                    <div class="comment-item">
+                        <div class="comment-header">
+                            <span class="user-icon">MK</span>
+                            <div>
+                                <div class="comment-user">Michael Kim</div>
+                                <div class="star-rating">
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment-body">
+                            Excellent test! It really mimics the real IELTS listening section. Highly recommend for
+                            anyone
+                            preparing for the exam.
+                        </div>
+                        <div class="comment-footer">
+                            <span class="comment-date">April 26, 2025</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const navTabs = document.querySelectorAll('.nav-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const startButton = document.querySelector('.btn-primary.btn-lg'); // Nút START
+        const loginModal = document.getElementById('loginModal');
+        const closeModal = document.querySelector('.modal-close');
+
+        const isLoggedIn = /*[[${isLoggedIn}]]*/ false;
+
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    tabContents.forEach(content => content.style.display = 'none');
+                    const tabId = tab.getAttribute('data-tab');
+                    document.getElementById(tabId).style.display = 'block';
+                });
+            });
+
+            //nút START
+        startButton.addEventListener('click', function (event) {
+            if (!isLoggedIn) {
+                event.preventDefault(); 
+                loginModal.style.display = 'flex'; 
+            }
+        });
+
+        closeModal.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === loginModal) {
+                loginModal.style.display = 'none';
+            }
+        });
+        });
+
+        // Star rating 
+        document.addEventListener('DOMContentLoaded', function () {
+            const stars = document.querySelectorAll('.star-rating-input .fa-star');
+
+            stars.forEach(star => {
+                star.addEventListener('click', function () {
+                    const value = this.getAttribute('data-value');
+
+                    stars.forEach(s => s.classList.remove('active'));
+
+                    stars.forEach(s => {
+                        if (s.getAttribute('data-value') <= value) {
+                            s.classList.add('active');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    <script th:src="@{../js/header.js}"></script>
+</body>
+
+</html>

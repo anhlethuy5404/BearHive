@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BearHive - English Practice</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" th:href="@{/css/admin-info.css}">
+    </head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <img th:src="@{/image/avt/bear.png}">
+                <h2>Admin Dashboard</h2>
+            </div>
+            <nav class="nav-menu">
+                <a th:href="@{/admin/dashboard}" th:classappend="${activePage == 'dashboard' ? 'active' : ''}" class="nav-item">
+                    <i class="fa fa-th-large"></i> Dashboard
+                </a>
+                <a th:href="@{/admin/users}" th:classappend="${activePage == 'users' ? 'active' : ''}" class="nav-item">
+                    <i class="fa fa-users"></i> Users <span class="badge">8</span>
+                </a>
+                <a th:href="@{/admin/tests}" th:classappend="${activePage == 'tests' ? 'active' : ''}" class="nav-item">
+                    <i class="fa fa-file"></i> Test
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fa fa-clone"></i> Flashcard
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fa fa-check-square-o"></i> Dictation
+                </a>
+                <a href="/home" class="nav-item logout">
+                    <i class="fa fa-home"></i> Home
+                </a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <div th:switch="${activePage}">
+                <div th:case="'dashboard'">
+                    <div th:insert="~{dashboard :: content}"></div>
+                </div>
+                <div th:case="'users'">
+                    <div th:insert="~{users :: content}"></div>
+                </div>
+                <div th:case="'tests'">
+                    <div th:switch="${subPage}">
+                        <div th:case="'test-list'">
+                            <div th:insert="~{admintest :: content}"></div>
+                        </div>
+                        <div th:case="'test-create'">
+                            <div th:insert="~{createtest :: content}"></div>
+                        </div>
+                    </div>
+                </div>
+                <div th:case="*">
+                    <p>Trang không tồn tại!</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Recovery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles_for_login.css}">
+    <link rel="stylesheet" th:href="@{/css/verify.css}">
+</head>
+<body>
+    <div th:if="${error!=null}" class="message error">[[${error}]]</div>
+    <div th:if="${success!=null}" class="message success">[[${success}]]</div>
+    <div class="container">
+        <div class="form-box">
+            <h2>Xác nhận OTP</h2>
+            <p>Nhập mã OTP đã gửi đến email của bạn</p>
+            <form th:action="@{/verify}" method="post">
+                <input type="hidden" th:value="${email}" name="email">
+                <div class="input-group">
+                    <input type="text" name="otp" placeholder="Enter OTP" required>
+                </div>
+                <button type="submit" class="submit-btn">Xác nhận</button>
+            </form>
+            <form th:action="@{/resend}" method="post">
+                <input type="hidden" th:value="${email}" name="email">
+                <button type="submit" class="resend-btn">Gửi lại OTP</button>
+            </form>
+        </div>
+    </div>
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
+    <div class="shape shape-5"></div>
+
+    <script th:src="@{/js/background-patterns.js}"></script>
+    <script th:src="@{/js/form-animations.js}"></script>
+    <script th:src="@{/js/password-validation.js}"></script>
+</body>
+</html>

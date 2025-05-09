@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BearHive - English Practice</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/dictation.css}">
+</head>
+
+<body>
+  <div th:insert="~{header :: header}"></div>
+  <div class="dictation-container">
+    <header class="platform-header">
+      <div class="header-content">
+        <h1>Dictation</h1>
+        <p class="subtitle">Master your subjects with interactive learning</p>
+        <div class="search-bar">
+          <input type="text" placeholder="Search for dictations..." />
+          <button><i class="fa fa-search"></i></button>
+        </div>
+      </div>
+    </header>
+
+    <nav class="dictation-nav">
+      <ul>
+        <li id="daily-tab" th:classappend="${activeTab == 'daily'} ? 'active'" onclick="switchTab('daily')">Daily
+          Dictation</li>
+        <li id="topic-tab" th:classappend="${activeTab == 'topic'} ? 'active'" onclick="switchTab('topic')">Topics</li>
+        <li id="difficulty-tab" th:classappend="${activeTab == 'difficulty'} ? 'active'"
+          onclick="switchTab('difficulty')">Difficulty Levels</li>
+      </ul>
+    </nav>
+    <div class="tab-content">
+      <div id="daily-content" th:class="${activeTab == 'daily'} ? '' : 'hidden'">
+        <section class="recommended-section">
+          <h2>Recommended for today</h2>
+          <div class="dictation-grid">
+            <div th:each="dictation : ${dailyDictations}" class="dictation-card">
+              <div class="card-content">
+                <img th:src="${dictation.coveredImage}" class="card-image">
+                <div class="difficulty easy" th:if="${dictation.difficulty == 'Easy'}">Easy</div>
+                <div class="difficulty medium" th:if="${dictation.difficulty == 'Medium'}">Medium</div>
+                <div class="difficulty hard" th:if="${dictation.difficulty == 'Hard'}">Hard</div>
+                <h3 th:text="${dictation.title}"></h3>
+                <p th:text="${dictation.description}" class="description"></p>
+                <div class="stats">
+                  <span><i class="fa fa-users"></i> <span th:text="${dictation.learners}"></span></span>
+                  <span><i class="fa fa-star"></i> <span th:text="${dictation.rating}"></span></span>
+                </div>
+                <a th:href="@{/dictation/content/{id}(id=${dictation.id})}" class="start-btn">Start</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="popular-section">
+          <div class="section-header">
+            <h2>Most Popular Dictations</h2>
+            <div class="filters">
+              <select id="filter-select" onchange="updateFilter(this.value)">
+                <option value="learners" th:selected="${filter == 'learners'}">Most Learners</option>
+                <option value="rating" th:selected="${filter == 'rating'}">Top Rated</option>
+              </select>
+            </div>
+          </div>
+          <div class="dictation-grid">
+            <div th:each="dictation : ${popularDictations}" class="dictation-card">
+              <div class="card-content">
+                <img th:src="${dictation.coveredImage}" class="card-image">
+                <h3 th:text="${dictation.title}"></h3>
+                <p th:text="${dictation.description}" class="description"></p>
+                <div class="stats">
+                  <span><i class="fa fa-users"></i> <span th:text="${dictation.learners}"></span></span>
+                  <span><i class="fa fa-star"></i> <span th:text="${dictation.rating}"></span></span>
+                </div>
+                <div class="difficulty easy" th:if="${dictation.difficulty == 'Easy'}">Easy</div>
+                <div class="difficulty medium" th:if="${dictation.difficulty == 'Medium'}">Medium</div>
+                <div class="difficulty hard" th:if="${dictation.difficulty == 'Hard'}">Hard</div>
+                <a th:href="@{/dictation/content/{id}(id=${dictation.id})}" class="learn-btn">Learn Now</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div id="topic-content" th:class="${activeTab == 'topic'} ? '' : 'hidden'">
+        <section class="topic-section" th:each="entry : ${dictationsByTopics}">
+          <h2 th:text="${entry.key}"></h2>
+          <div class="dictation-grid">
+            <div th:each="dictation : ${entry.value}" class="dictation-card">
+              <div class="card-content">
+                <img th:src="${dictation.coveredImage}" class="card-image">
+                <div class="difficulty easy" th:if="${dictation.difficulty == 'Easy'}">Easy</div>
+                <div class="difficulty medium" th:if="${dictation.difficulty == 'Medium'}">Medium</div>
+                <div class="difficulty hard" th:if="${dictation.difficulty == 'Hard'}">Hard</div>
+                <h3 th:text="${dictation.title}"></h3>
+                <p th:text="${dictation.description}" class="description"></p>
+                <div class="stats">
+                  <span><i class="fa fa-users"></i> <span th:text="${dictation.learners}"></span></span>
+                  <span><i class="fa fa-star"></i> <span th:text="${dictation.rating}"></span></span>
+                </div>
+                <a th:href="@{/dictation/content/{id}(id=${dictation.id})}" class="start-btn">Start</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div id="difficulty-content" th:class="${activeTab == 'difficulty'} ? '' : 'hidden'">
+        <section class="difficulty-section">
+          <!-- Hiển thị Easy -->
+          <div
+            th:if="${dictationsByDifficulty != null and dictationsByDifficulty['Easy'] != null and not #lists.isEmpty(dictationsByDifficulty['Easy'])}">
+            <h2>Easy</h2>
+            <div class="dictation-grid">
+              <div th:each="dictation : ${dictationsByDifficulty['Easy']}" class="dictation-card">
+                <div class="card-content">
+                  <img th:src="${dictation.coveredImage}" class="card-image">
+                  <div class="difficulty easy" th:if="${dictation.difficulty == 'Easy'}">Easy</div>
+                  <div class="difficulty medium" th:if="${dictation.difficulty == 'Medium'}">Medium</div>
+                  <div class="difficulty hard" th:if="${dictation.difficulty == 'Hard'}">Hard</div>
+                  <h3 th:text="${dictation.title}"></h3>
+                  <p th:text="${dictation.description}" class="description"></p>
+                  <div class="stats">
+                    <span><i class="fa fa-users"></i> <span th:text="${dictation.learners}"></span></span>
+                    <span><i class="fa fa-star"></i> <span th:text="${dictation.rating}"></span></span>
+                  </div>
+                  <a th:href="@{/dictation/content/{id}(id=${dictation.id})}" class="start-btn">Start</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hiển thị Medium -->
+          <div
+            th:if="${dictationsByDifficulty != null and dictationsByDifficulty['Medium'] != null and not #lists.isEmpty(dictationsByDifficulty['Medium'])}">
+            <h2>Medium</h2>
+            <div class="dictation-grid">
+              <div th:each="dictation : ${dictationsByDifficulty['Medium']}" class="dictation-card">
+                <div class="card-content">
+                  <img th:src="${dictation.coveredImage}" class="card-image">
+                  <div class="difficulty easy" th:if="${dictation.difficulty == 'Easy'}">Easy</div>
+                  <div class="difficulty medium" th:if="${dictation.difficulty == 'Medium'}">Medium</div>
+                  <div class="difficulty hard" th:if="${dictation.difficulty == 'Hard'}">Hard</div>
+                  <h3 th:text="${dictation.title}"></h3>
+                  <p th:text="${dictation.description}" class="description"></p>
+                  <div class="stats">
+                    <span><i class="fa fa-users"></i> <span th:text="${dictation.learners}"></span></span>
+                    <span><i class="fa fa-star"></i> <span th:text="${dictation.rating}"></span></span>
+                  </div>
+                  <a th:href="@{/dictation/content/{id}(id=${dictation.id})}" class="start-btn">Start</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hiển thị Hard -->
+          <div
+            th:if="${dictationsByDifficulty != null and dictationsByDifficulty['Hard'] != null and not #lists.isEmpty(dictationsByDifficulty['Hard'])}">
+            <h2>Hard</h2>
+            <div class="dictation-grid">
+              <div th:each="dictation : ${dictationsByDifficulty['Hard']}" class="dictation-card">
+                <div class="card-content">
+                  <img th:src="${dictation.coveredImage}" class="card-image">
+                  <div class="difficulty easy" th:if="${dictation.difficulty == 'Easy'}">Easy</div>
+                  <div class="difficulty medium" th:if="${dictation.difficulty == 'Medium'}">Medium</div>
+                  <div class="difficulty hard" th:if="${dictation.difficulty == 'Hard'}">Hard</div>
+                  <h3 th:text="${dictation.title}"></h3>
+                  <p th:text="${dictation.description}" class="description"></p>
+                  <div class="stats">
+                    <span><i class="fa fa-users"></i> <span th:text="${dictation.learners}"></span></span>
+                    <span><i class="fa fa-star"></i> <span th:text="${dictation.rating}"></span></span>
+                  </div>
+                  <a th:href="@{/dictation/content/{id}(id=${dictation.id})}" class="start-btn">Start</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script th:src="@{../js/header.js}"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const savedScrollPosition = sessionStorage.getItem("scrollPosition");
+      if (savedScrollPosition) {
+        window.scrollTo(0, parseInt(savedScrollPosition));
+        sessionStorage.removeItem("scrollPosition");
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const filter = urlParams.get('filter') || 'learners';
+      document.getElementById('filter-select').value = filter;
+    });
+
+    function switchTab(tab) {
+      const url = new URL(window.location);
+      url.searchParams.set('tab', tab);
+      window.location.href = url.toString();
+    }
+
+    function updateFilter(filter) {
+      sessionStorage.setItem("scrollPosition", window.scrollY);
+      const url = new URL(window.location);
+      url.searchParams.set('filter', filter);
+      window.location.href = url.toString();
+    }
+  </script>
+</body>

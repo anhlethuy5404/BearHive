@@ -1,0 +1,275 @@
+:root {
+    --primary-yellow: #ffc107;
+    --secondary-yellow: #ffdd57;
+    --light-yellow: #fff9c4;
+    --dark-yellow: #ffa000;
+    --accent-color: #ff5722;
+    --text-dark: #333333;
+    --text-light: #ffffff;
+    --success-color: #4caf50;
+    --gray-light: #f5f5f5;
+    --gray-medium: #e0e0e0;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    overflow-x: hidden;
+}
+
+.container {
+    margin-top: 70px;
+    padding: 20px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h1 {
+    font-size: 2rem;
+    color: var(--dark-yellow);
+    margin-bottom: 1.5rem;
+    border-bottom: 3px solid var(--primary-yellow);
+    padding-bottom: 0.5rem;
+}
+
+h1 span {
+    color: var(--accent-color);
+}
+
+.top-links {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+.top-links a {
+    color: var(--text-dark);
+    text-decoration: none;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.top-links a:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+.flashcard-container {
+    perspective: 1000px;
+    margin-bottom: 20px;
+    position: relative;
+    padding: 0 60px;
+}
+
+.flashcard {
+    background-color: white;
+    border-radius: 10px;
+    height: 380px;
+    position: relative;
+}
+
+.flippable {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.flippable.flipped {
+    transform: rotateY(180deg);
+}
+
+.flashcard-front,
+.flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.flashcard-back {
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.word {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.play-audio-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 22px;
+    color: var(--primary-yellow);
+    margin-top: 10px;
+}
+
+.play-audio-btn:hover {
+    color: var(--dark-yellow);
+}
+
+.pronunciation {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.definition,
+.example div {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.definition {
+    margin-bottom: 10px;
+}
+
+.example {
+    margin-top: 20px;
+}
+
+.example ul {
+    margin-bottom: 10px;
+    line-height: 1.5;
+    padding-left: 20px;
+    font-weight: normal;
+}
+
+.gift-image {
+    width: 150px;
+    height: auto;
+    object-fit: contain;
+    margin-right: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.flashcard-back .content {
+    flex: 1;
+    padding: 30px;
+}
+
+.flashcard-back .image-container {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flip-icon {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    color: #999;
+    font-size: 24px;
+}
+
+.action-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.navigation-buttons {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.nav-button {
+    background-color: var(--primary-yellow);
+    color: var(--text-dark);
+    border: none;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-button:hover {
+    background-color: var(--dark-yellow);
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+    .flashcard-back {
+        grid-template-columns: 1fr;
+    }
+
+    .word {
+        font-size: 2.5rem;
+    }
+
+    .pronunciation {
+        font-size: 1.2rem;
+    }
+
+    .image-container {
+        margin-top: 1rem;
+    }
+
+    .gift-image {
+        max-height: 150px;
+    }
+
+    .flippable {
+        height: auto;
+        min-height: 450px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .word {
+        font-size: 2rem;
+    }
+
+    .navigation-buttons {
+        gap: 1rem;
+    }
+
+    .nav-button {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+}

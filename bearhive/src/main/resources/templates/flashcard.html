@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Test</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" th:href="@{css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/flashcard.css}">
+</head>
+
+<body>
+  <div th:insert="~{header :: header}"></div>
+  <div class="study-platform-container">
+    <header class="platform-header">
+      <div class="header-content">
+        <h1>Flashcard</h1>
+        <p class="subtitle">Master your subjects with interactive learning</p>
+        <div class="search-bar">
+          <input type="text" placeholder="Search for flashcards..." />
+          <button><i class="fa fa-search"></i></button>
+        </div>
+      </div>
+    </header>
+
+    <div class="flashcard-sets">
+      <div th:each="flashcard : ${flashcards}" class="flashcard-set">
+        <div class="set-thumbnail">
+          <img th:src="${flashcard.coveredImage}" class="set-image">
+          <div class="difficulty easy" th:if="${flashcard.difficulty == 'Easy'}">Easy</div>
+          <div class="difficulty medium" th:if="${flashcard.difficulty == 'Medium'}">Medium</div>
+          <div class="difficulty hard" th:if="${flashcard.difficulty == 'Hard'}">Hard</div>
+        </div>
+        <div class="set-details">
+          <h2 th:text="${flashcard.title}"></h2>
+          <p th:text="${flashcard.description}"></p>
+          <div class="set-meta">
+            <span th:text="${flashcard.questions} + ' từ'"></span>
+            <span th:text="${flashcard.type}"></span>
+          </div>
+          <a th:href="@{/flashcard/{id}(id=${flashcard.id})}" class="practice-btn">
+            Luyện tập Flashcard
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script th:src="@{../js/header.js}"></script>
+</body>
+
+</html>

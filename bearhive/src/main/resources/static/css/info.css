@@ -1,0 +1,183 @@
+* {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.profile-container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #fff9e6;
+}
+
+.cover-photo {
+    height: 280px;
+    position: relative;
+    background-color: #ffd700;
+    background-image: url("/image/bg/abstract-modern-yellow-gradient-vanishing-circles-background-free-vector.jpg");
+    background-repeat: none;
+    background-position: bottom;
+    background-size: cover;
+}
+
+.profile-content {
+    position: relative;
+    padding: 0 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.avatar-section {
+    text-align: center;
+    margin-top: -75px;
+    position: relative;
+    z-index: 2;
+}
+
+.avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: #f5f5f5;
+}
+
+.user-name {
+    margin: 15px 0 5px;
+    color: #333;
+    font-size: 2em;
+}
+
+.user-info {
+    color: #666;
+    margin: 5px 0;
+}
+
+.profile-nav {
+    margin: 30px 0;
+    border-bottom: 2px solid #eee;
+}
+
+.profile-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.profile-nav li {
+    padding: 10px 20px;
+    cursor: pointer;
+    position: relative;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.profile-nav li.active {
+    color: #ffd700;
+}
+
+.profile-nav li.active::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #ffd700;
+}
+
+.tab-content {
+    padding: 20px 0;
+}
+
+.info-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.info-item {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+}
+
+.label {
+    font-weight: bold;
+    width: 120px;
+    color: #666;
+}
+
+.value {
+    color: #333;
+}
+
+.timeline {
+    padding: 20px 0;
+}
+
+.activity-item {
+    display: flex;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.activity-date {
+    min-width: 100px;
+    color: #666;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-content h4 {
+    margin: 0 0 5px;
+    color: #333;
+}
+
+.activity-content p {
+    margin: 0;
+    color: #666;
+}
+
+.hidden {
+    display: none;
+}
+@media (max-width: 768px) {
+    .cover-photo {
+        height: 200px;
+    }
+
+    .avatar {
+        width: 120px;
+        height: 120px;
+    }
+
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .label {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .activity-item {
+        flex-direction: column;
+    }
+
+    .activity-date {
+        margin-bottom: 10px;
+    }
+}
