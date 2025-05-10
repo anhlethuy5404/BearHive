@@ -21,26 +21,32 @@
                 <p class="congrats-subtitle">You've completed the [[${test.title}]]</p>
             </div>
 
-            <div class="result-body">
+            <div class="result-body" th:if="${userTest!= null}">
                 <div class="score-summary">
                     <div class="score-item">
-                        <div class="score-value">7.5</div>
+                        <div class="score-value" th:with="bandScore=${userTest.score >= 39 ? 9.0 : userTest.score >= 37 ? 8.5 : userTest.score >= 35 ? 8.0 : userTest.score >= 32 ? 7.5 : userTest.score >= 30 ? 7.0 : userTest.score >= 26 ? 6.5 : userTest.score >= 23 ? 6.0 : userTest.score >= 18 ? 5.5 : userTest.score >= 16 ? 5.0 : userTest.score >= 13 ? 4.5 : userTest.score >= 11 ? 4.0 : userTest.score >= 8 ? 3.5 : userTest.score >= 6 ? 3.0 : 0}">
+                            [[${bandScore}]]
+                        </div>
                         <div class="score-label">OVERALL SCORE</div>
                     </div>
                     <div class="score-item">
-                        <div class="score-value">34/40</div>
+                        <div class="score-value">[[${userTest.score}]]/40</div>
                         <div class="score-label">CORRECT ANSWERS</div>
                     </div>
                     <div class="score-item">
-                        <div class="score-value">85%</div>
+                        <div class="score-value" th:with="accuracy=${userTest.score * 100 / 40}">[[${accuracy}]]%</div>
                         <div class="score-label">ACCURACY</div>
                     </div>
                 </div>
 
                 <div class="badge-container">
-                    <div class="badge">7.5</div>
+                    <div class="badge" th:with="bandScore=${userTest.score >= 39 ? 9.0 : userTest.score >= 37 ? 8.5 : userTest.score >= 35 ? 8.0 : userTest.score >= 32 ? 7.5 : userTest.score >= 30 ? 7.0 : userTest.score >= 26 ? 6.5 : userTest.score >= 23 ? 6.0 : userTest.score >= 18 ? 5.5 : userTest.score >= 16 ? 5.0 : userTest.score >= 13 ? 4.5 : userTest.score >= 11 ? 4.0 : userTest.score >= 8 ? 3.5 : userTest.score >= 6 ? 3.0 : 0}">
+                        [[${bandScore}]]
+                    </div>
                     <div class="badge-label">Band Score</div>
-                    <p class="achievement-text">Your performance places you in the top 15% of test takers!</p>
+                    <p class="achievement-text" th:with="percentile=${userTest.score >= 35 ? 'top 15%' : userTest.score >= 30 ? 'top 25%' : userTest.score >= 23 ? 'top 40%' : userTest.score >= 18 ? 'top 60%' : userTest.score >= 13 ? 'top 75%' : userTest.score >= 8 ? 'top 85%' : userTest.score >= 6 ? 'top 90%' : 'top 95%'}">
+                        Your performance places you in the [[${percentile}]] of test takers!
+                    </p>
                 </div>
 
                 <div class="part-section" th:each="part, partStat : ${parts}">
@@ -49,98 +55,43 @@
                         <span class="toggle-icon fa fa-chevron-down"></span>
                     </h2>
                     <div class="answer-grid" th:id="'answers-' + ${partStat.index}">
-                        <div class="answer-item">
-                            <div class="answer-header">
-                                <span class="question-number">Question 1</span>
-                                <span class="status-icon status-correct">✓</span>
-                            </div>
-                            <div class="answer-text">
-                                <div class="correct-answer">James</div>
-                            </div>
-                        </div>
-                        <div class="answer-item">
-                            <div class="answer-header">
-                                <span class="question-number">Question 2</span>
-                                <span class="status-icon status-correct">✓</span>
-                            </div>
-                            <div class="answer-text">
-                                <div class="correct-answer">Australia</div>
-                            </div>
-                        </div>
-                        <div class="answer-item">
-                            <div class="answer-header">
-                                <span class="question-number">Question 3</span>
-                                <span class="status-icon status-incorrect">✗</span>
-                            </div>
-                            <div class="answer-text">
-                                <div class="label-correct">Correct:</div>
-                                <div class="correct-answer">June 15</div>
-                                <div class="your-answer">June 5</div>
-                            </div>
-                        </div>
-                        <div class="answer-item">
-                            <div class="answer-header">
-                                <span class="question-number">Question 4</span>
-                                <span class="status-icon status-correct">✓</span>
-                            </div>
-                            <div class="answer-text">
-                                <div class="correct-answer">4</div>
-                            </div>
-                        </div>
-                        <div class="answer-item">
-                            <div class="answer-header">
-                                <span class="question-number">Question 5</span>
-                                <span class="status-icon status-correct">✓</span>
-                            </div>
-                            <div class="answer-text">
-                                <div class="correct-answer">business</div>
-                            </div>
-                        </div>
-                        <div class="answer-item">
-                            <div class="answer-header">
-                                <span class="question-number">Question 6</span>
-                                <span class="status-icon status-correct">✓</span>
-                            </div>
-                            <div class="answer-text">
-                                <div class="correct-answer">apartment</div>
-                            </div>
-                        </div>
-                        <div class="answer-item">
-                            <div class="answer-header">
-                                <span class="question-number">Question 7</span>
-                                <span class="status-icon status-incorrect">✗</span>
-                            </div>
-                            <div class="answer-text">
-                                <div class="label-correct">Correct:</div>
-                                <div class="correct-answer">garage</div>
-                                <div class="your-answer">driveway</div>
-                            </div>
-                        </div>
-                        <div class="answer-item">
-                            <div class="answer-header">
-                                <span class="question-number">Question 8</span>
-                                <span class="status-icon status-correct">✓</span>
-                            </div>
-                            <div class="answer-text">
-                                <div class="correct-answer">shops</div>
-                            </div>
-                        </div>
-                        <div class="answer-item">
-                            <div class="answer-header">
-                                <span class="question-number">Question 9</span>
-                                <span class="status-icon status-correct">✓</span>
-                            </div>
-                            <div class="answer-text">
-                                <div class="correct-answer">Brighton</div>
-                            </div>
-                        </div>
-                        <div class="answer-item">
-                            <div class="answer-header">
-                                <span class="question-number">Question 10</span>
-                                <span class="status-icon status-correct">✓</span>
-                            </div>
-                            <div class="answer-text">
-                                <div class="correct-answer">450</div>
+                        <div class="general-question-group" th:each="generalQuestion : ${part.generalQuestions}">
+                            <div class="general-question-row" th:each="question : ${generalQuestion.questions}">
+                                <div th:with="userAnswer=${userAnswerMap.get(question.id)}">
+                                    <!-- TH có câu trả lời -->
+                                    <div th:if="${userAnswer != null}" class="answer-item">
+                                        <div class="answer-header">
+                                            <span class="question-number">Question [[${question.number}]]</span>
+                                            <span class="status-icon" th:classappend="${userAnswer.correct} ? 'status-correct' : 'status-incorrect'">
+                                                [[${userAnswer.correct} ? '✓' : '✗']]
+                                            </span>
+                                        </div>
+                                        <div class="answer-text">
+                                            <div th:if="${userAnswer.correct}">
+                                                <div class="correct-answer" th:text="${userAnswer.answerText}"></div>
+                                            </div>
+                                            <div th:unless="${userAnswer.correct}">
+                                                <div class="label-correct">Correct:</div>
+                                                <div class="correct-answer" th:if="${question.getQuestionType() == 'MULTIPLE_CHOICE'}" th:text="${question.correctAnswer}"></div>
+                                                <div class="correct-answer" th:if="${question.getQuestionType() == 'FILL_IN_BLANK'}" th:text="${question.correctAnswers[0]}"></div>
+                                                <div class="your-answer" th:text="${userAnswer.answerText}">Your answer</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- TH k có câu trả lời -->
+                                    <div th:if="${userAnswer == null}" class="answer-item">
+                                        <div class="answer-header">
+                                            <span class="question-number">Question [[${question.number}]]</span>
+                                            <span class="status-icon status-incorrect">✗</span>
+                                        </div>
+                                        <div class="answer-text">
+                                            <div class="label-correct">Correct:</div>
+                                            <div class="correct-answer" th:if="${question.getQuestionType() == 'MULTIPLE_CHOICE'}" th:text="${question.correctAnswer}"></div>
+                                            <div class="correct-answer" th:if="${question.getQuestionType() == 'FILL_IN_BLANK'}" th:text="${question.correctAnswers[0]}"></div>
+                                            <div class="your-answer">Not answered</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

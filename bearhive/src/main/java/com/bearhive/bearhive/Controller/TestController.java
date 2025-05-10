@@ -90,15 +90,16 @@ public class TestController {
         User user = userRepository.findByEmail(email).orElse(null);
         UserTest userTest = null;
         if (user != null) {
-            userTest = userTestRepository.findAll().stream()
-                    .filter(ut -> ut.getTest().getId().equals(id) && ut.getUser().getId().equals(user.getId()))
-                    .max((ut1, ut2) -> ut1.getCompletedDate().compareTo(ut2.getCompletedDate()))
-                    .orElse(null);
+            userTest = userTestRepository.findLatestByTestIdAndUserId(id, user.getId()).orElse(null);
+        }
+        if (userTest == null) {
+            return "error";
         }
 
         model.addAttribute("test", test);
         model.addAttribute("parts", test.getParts());
         model.addAttribute("userTest", userTest);
+        model.addAttribute("userAnswerMap", testService.getUserAnswersMap(userTest));
         return "test-result";
     }
     

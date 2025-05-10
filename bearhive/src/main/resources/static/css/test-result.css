@@ -239,10 +239,14 @@ body {
 }
 
 .answer-grid.collapsed {
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    display: flex; 
+    flex-wrap: wrap;
     gap: 15px;
     margin-bottom: 30px;
+}
+
+.general-question-group {
+    display: contents;
 }
 
 .answer-item {
@@ -253,6 +257,8 @@ body {
     flex-direction: column;
     border: 1px solid var(--border);
     opacity: 0;
+    height: 150px;
+    width: 176px;
     animation: answer-appear 0.2s ease-out forwards;
 }
 
