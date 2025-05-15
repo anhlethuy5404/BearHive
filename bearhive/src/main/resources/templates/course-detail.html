@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BearHive - English Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/course-detail.css}">
+</head>
+
+<body>
+    <div th:insert="~{header :: header}"></div>
+    <div class="container">
+        <div class="breadcrumb">
+            <a th:href="@{/home}">Home</a>
+            <span class="breadcrumb-separator">›</span>
+            <a th:href="@{/course}">Courses</a>
+            <span class="breadcrumb-separator">›</span>
+            <a th:href="@{/course}" th:text="${course.category}"></a>
+            <span class="breadcrumb-separator">›</span>
+            <span th:text="${course.title}"></span>
+        </div>
+
+        <div class="course-header">
+            <div class="course-title-section">
+                <div class="course-title-container">
+                    <span class="course-category" th:text="${course.category}"></span>
+                    <h1 class="course-title" th:text="${course.title}"></h1>
+                    <p class="course-subtitle" th:text="${course.description}"></p>
+                    <div class="course-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">👥</span>
+                            <span>1,243 người đã đăng ký</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">🕒</span>
+                            <span>Cập nhật lần cuối: [[${course.lastUpdated}]]</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="course-price-container">
+                    <div class="price-tag">
+                        <span class="original-price">[[${course.originalPrice}]]đ</span>
+                        [[${course.discountedPrice}]]đ
+                        <span class="discount-badge">Giảm [[${T(java.lang.Math).round((1 - course.discountedPrice /
+                            course.originalPrice) * 100)}]]%</span>
+                    </div>
+                    <p class="price-note">Giá ưu đãi sẽ kết thúc trong 3 ngày tới</p>
+                    <a th:if="${isLoggedIn}" th:href="@{/cart}" class="btn btn-accent">Đăng ký ngay</a>
+                    <a th:unless="${isLoggedIn}" onclick="showLoginModal()" class="btn btn-accent">Đăng ký ngay</a>
+                    <a th:if="${isLoggedIn}" class="btn btn-cart">Cho vào giỏ hàng</a>
+                    <a th:unless="${isLoggedIn}" onclick="showLoginModal()" class="btn btn-cart">Cho vào giỏ hàng</a>
+                </div>
+            </div>
+            <img th:src="${course.imageUrl}" class="course-image">
+        </div>
+
+        <div class="course-content">
+            <div class="main-content">
+                <div class="course-description">
+                    <h2 class="section-title">Tổng quan khóa học</h2>
+                    <p class="description-text">
+                        [[${course.overview}]]
+                    </p>
+                    <div class="highlight-box">
+                        <h3 class="highlight-title">Điều gì khiến khóa học đặc biệt?</h3>
+                        <p>
+                            [[${course.specialFeature}]]
+                        </p>
+                    </div>
+                </div>
+
+                <div class="curriculum">
+                    <h2 class="section-title">Chương trình học</h2>
+                    <div class="module">
+                        <div class="module-header">
+                            <h3 class="module-title">Module 1: IELTS Academic Test Overview</h3>
+                            <div class="module-meta">
+                                <span>5 lessons</span>
+                                <span>45 minutes</span>
+                            </div>
+                        </div>
+                        <div class="module-content">
+                            <div class="lesson">
+                                <span class="lesson-icon">📺</span>
+                                <span class="lesson-title">Understanding the IELTS Academic Test Format</span>
+                                <span class="lesson-duration">10 min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="module">
+                        <div class="module-header">
+                            <h3 class="module-title">Module 2: Listening Mastery</h3>
+                            <div class="module-meta">
+                                <span>12 lessons</span>
+                                <span>3 hours</span>
+                            </div>
+                        </div>
+                        <div class="module-content">
+                            <div class="lesson">
+                                <span class="lesson-icon">📺</span>
+                                <span class="lesson-title">Advanced Listening Strategies</span>
+                                <span class="lesson-duration">15 min</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="sidebar-card">
+                    <h3 class="section-title">Khóa học này bao gồm</h3>
+                    <ul class="includes-list">
+                        <li class="includes-item">
+                            <span class="includes-icon">🎬</span>
+                            <span>50 bài học qua video (100 giờ)</span>
+                        </li>
+                        <li class="includes-item">
+                            <span class="includes-icon">🏆</span>
+                            <span>Chứng chỉ hoàn thành khóa học</span>
+                        </li>
+                        <li class="includes-item">
+                            <span class="includes-icon">⏱️</span>
+                            <span>Tự do trong thời gian học</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="certificate-box">
+                    <div class="certificate-icon">🏆</div>
+                    <h3 class="certificate-title">Chứng chỉ hoàn thành khóa học</h3>
+                    <p class="certificate-text">Nhận chứng chỉ sau khi hoàn thành khóa học để chứng minh thành tích của
+                        bạn.</p>
+                </div>
+
+                <div class="sidebar-card">
+                    <h3 class="section-title">Đối tượng có thể học</h3>
+                    <ul class="includes-list">
+                        <li class="includes-item">
+                            <span class="includes-icon">👨‍🎓</span>
+                            <span>Sinh viên đại học cần chứng chỉ</span>
+                        </li>
+                        <li class="includes-item">
+                            <span class="includes-icon">👨‍💼</span>
+                            <span>Người đi làm cần phục vụ cho công việc</span>
+                        </li>
+                        <li class="includes-item">
+                            <span class="includes-icon">👩‍🏫</span>
+                            <span>Giáo viên Tiếng Anh cần cải thiện trình độ</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="related-courses">
+            <h2 class="section-title">Khóa học liên quan</h2>
+            <div class="related-courses-grid">
+                <div class="related-course-card">
+                    <img src="/placeholder.svg?height=160&width=280" alt="IELTS Academic Foundation"
+                        class="related-course-image">
+                    <div class="related-course-content">
+                        <h3 class="related-course-title">IELTS Academic Foundation</h3>
+                        <p>Build a strong foundation for the IELTS Academic test. Ideal for students targeting Band
+                            5.5-6.5.</p>
+                        <div class="related-course-meta">
+                            <div class="related-course-price">$199</div>
+                            <div class="related-course-rating">
+                                <span class="related-course-stars">★★★★★</span>
+                                <span>(324)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- login modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>Vui lòng đăng nhập</h2>
+            <p>Bạn cần đăng nhập để thực hiện chức năng này. Chưa có tài khoản? Đăng kí ngay!</p>
+            <div class="modal-buttons">
+                <a th:href="@{/login}" class="btn btn-primary">Đăng nhập</a>
+                <a th:href="@{/signup}" class="btn btn-outline">Đăng ký</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const moduleHeaders = document.querySelectorAll('.module-header');
+            moduleHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const module = header.parentElement;
+                    module.classList.toggle('active');
+                });
+            });
+
+            document.querySelector('.module').classList.add('active');
+            const modal = document.getElementById('loginModal');
+            const closeModal = document.querySelector('.modal-close');
+
+            window.showLoginModal = function () {
+                modal.style.display = 'flex';
+            }
+            closeModal.addEventListener('click', function () {
+                modal.style.display = 'none';
+            });
+            window.addEventListener('click', function (event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+        });
+    </script>
+    <script th:src="@{../js/header.js}"></script>
+</body>
+
+</html>

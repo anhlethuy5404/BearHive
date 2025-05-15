@@ -36,7 +36,7 @@
           <h3 th:text="${test.title}"></h3>
           <p th:text="${test.description}"></p>
           <div class="stats">
-            <span><i class="fa fa-book"></i><span th:text="${test.questions}"></span> questions</span>
+            <span><i class="fa fa-book"></i>[[${test.questions}]] questions</span>
             <span><i class="fa fa-users"></i> 10 students</span>
           </div>
           <a th:href="@{/ielts/{id}(id=${test.id})}" class="explore-btn">Luyện tập</a>

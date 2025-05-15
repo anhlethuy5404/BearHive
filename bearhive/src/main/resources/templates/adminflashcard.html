@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BearHive - English Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin-info.css}">
+</head>
+
+<body>
+    <div th:fragment="content">
+        <div class="content">
+            <div class="content-header">
+                <h1>English Flashcards</h1>
+                <p>Manage English flashcards</p>
+            </div>
+            <div class="table-controls">
+                <div class="search-users">
+                    <i class="fa fa-search"></i>
+                    <input type="text" placeholder="Search flashcards...">
+                </div>
+                <div class="create-test">
+                    <i class="fa fa-plus" style="color: white;"></i>
+                    <a th:href="@{/admin/flashcards/create}" class="create-btn">CREATE</a>
+                </div>
+            </div>
+            <div>
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Topic</th>
+                            <th>Description</th>
+                            <th>Difficulty</th>
+                            <th>Words</th>
+                            <th>Image</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="flashcard : ${flashcards}">
+                            <td th:text="${flashcard.title}"></td>
+                            <td th:text="${flashcard.type}"></td>
+                            <td th:text="${flashcard.description}"></td>
+                            <td th:text="${flashcard.difficulty}"></td>
+                            <td th:text="${flashcard.questions}"></td>
+                            <td><img th:src="${flashcard.coveredImage}" alt="Cover Image"
+                                    style="width: 100%; height: 100px; object-fit: cover;"></td>
+                            <td class="actions">
+                                <button class="action-btn edit-btn"
+                                    th:attr="data-id=${flashcard.id},data-title=${flashcard.title},data-type=${flashcard.type},data-description=${flashcard.description},data-difficulty=${flashcard.difficulty},data-questions=${flashcard.questions}"
+                                    onclick="openEditModal(this)">Sửa</button>
+                                <button class="action-btn delete-btn" th:attr="data-id=${flashcard.id}" onclick="openDeleteModal(this)">Xóa</button>
+                                <a th:href="@{/admin/flashcards/{id}/words(id=${flashcard.id})}"
+                                    class="action-btn manage-btn">Chi tiết</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Edit Modal -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <h2>Sửa Flashcard</h2>
+                <form id="editForm" method="post" enctype="multipart/form-data">
+                    <label for="editTitle">Tiêu đề</label>
+                    <input type="hidden" name="id" id="editId">
+                    <input type="text" name="title" id="editTitle" placeholder="Flashcard Title" required>                    
+                    <label for="editType">Chủ đề</label>
+                    <input type="text" name="type" id="editType" placeholder="Flashcard Topic" required>
+                    <label for="editDescription">Mô tả</label>
+                    <textarea name="description" id="editDescription" placeholder="Description"></textarea>
+                    <label for="editDifficulty">Mức độ</label>
+                    <select name="difficulty" id="editDifficulty" required>
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                    <label for="editQuestions">Số từ</label>
+                    <input type="number" name="questions" id="editQuestions" placeholder="Number of Words" required>
+                    <label for="editImage">Hình ảnh</label>
+                    <input type="file" name="imageFile" id="editImage">
+                    <button type="submit" class="save-btn">Lưu</button>
+                    <button type="button" class="cancel-btn" onclick="closeModal('editModal')">Hủy</button>
+                </form>
+            </div>
+        </div>
+        <!-- Delete Modal -->
+        <div id="deleteModal" class="modal">
+            <div class="modal-content">
+                <h2>Xác nhận xóa</h2>
+                <p>Bạn có chắc muốn xóa flashcard này?</p>
+                <form id="deleteForm" method="post">
+                    <input type="hidden" name="id" id="deleteId">
+                    <button type="submit" class="save-btn">Xóa</button>
+                    <button type="button" class="cancel-btn" onclick="closeModal('deleteModal')">Hủy</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

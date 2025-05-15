@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BearHive - English Practice</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" th:href="@{/css/admin-info.css}">
+    </head>
+    <body>
+        <div th:if="${error}" class="error-message">
+            <p th:text="${error}"></p>
+        </div>
+        <div th:fragment="content">
+            <div class="content">
+                <div class="back-to-tests">
+                    <i class="fa fa-arrow-left"></i>
+                    <a th:href="@{/admin/flashcards}">Back to Flashcards</a>
+                </div>
+                <div class="content-header">
+                    <div>
+                        <h1>Create Flashcard</h1>
+                        <p>Create a new English flashcard set</p>
+                    </div>
+                </div>
+                <div class="form-container">
+                    <form th:object="${flashcard}" th:action="@{/admin/flashcards/create}" method="post" enctype="multipart/form-data">
+                        <div class="form-group inline-group">
+                            <div class="form-subgroup">
+                                <label for="title">Flashcard Title</label>
+                                <input type="text" id="title" th:field="*{title}" placeholder="e.g. IELTS Vocabulary Practice" required>
+                            </div>
+                            <div class="form-subgroup">
+                                <label for="type">Flashcard Topic</label>
+                                <input type="text" id="title" th:field="*{type}" placeholder="Topic of this flashcard" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" th:field="*{description}" placeholder="Describe what this flashcard set covers and its purpose..." rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Difficulty Level</label>
+                            <div class="radio-group">
+                                <label>
+                                    <input type="radio" th:field="*{difficulty}" value="Easy" required>
+                                    <span class="radio-label beginner">Easy</span>
+                                </label>
+                                <label>
+                                    <input type="radio" th:field="*{difficulty}" value="Medium">
+                                    <span class="radio-label intermediate">Medium</span>
+                                </label>
+                                <label>
+                                    <input type="radio" th:field="*{difficulty}" value="Hard">
+                                    <span class="radio-label advanced">Hard</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group inline-group">
+                            <div class="form-subgroup">
+                                <label for="questions">Number of Words</label>
+                                <input type="number" id="questions" th:field="*{questions}" placeholder="Enter a number between 1 and 100" min="1" max="100" required>
+                            </div>
+                            <div class="form-subgroup">
+                                <label for="coveredImage">Cover Image</label>
+                                <input type="file" id="imageFile" name="imageFile">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Create Flashcard</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

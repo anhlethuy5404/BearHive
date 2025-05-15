@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BearHive - English Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin-info.css}">
+</head>
+
+<body>
+    <div th:fragment="content">
+        <div class="content">
+            <div class="back-to-tests">
+                <i class="fa fa-arrow-left"></i>
+                <a th:href="@{/admin/flashcards}">Back to Flashcards</a>
+            </div>
+            <div class="content-header">
+                <h1>Words in Flashcard</h1>
+                <p>Manage words for flashcard: <span th:text="${flashcard.title}"></span></p>
+            </div>            
+            <button class="create-btn-2" onclick="openCreateWordModal()">Add Word</button>
+            <div>
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>Word</th>
+                            <th>Pronunciation</th>
+                            <th>Type</th>
+                            <th>Meaning</th>
+                            <th>Example</th>
+                            <th>Image</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="word : ${words}">
+                            <td th:text="${word.word}"></td>
+                            <td th:text="${word.pronunciation}"></td>
+                            <td th:text="${word.type}"></td>
+                            <td th:text="${word.meaning}"></td>
+                            <td th:text="${word.example}"></td>
+                            <td><img th:src="${word.image}" style="width: 160px; height: 100px; object-fit: cover;">
+                            </td>
+                            <td class="actions">
+                                <button class="action-btn edit-btn"
+                                    th:attr="data-id=${word.id},data-word=${word.word},data-pronunciation=${word.pronunciation},data-type=${word.type},data-meaning=${word.meaning},data-example=${word.example}"
+                                    onclick="openEditWordModal(this)">Sửa</button>
+                                <button class="action-btn delete-btn" th:attr="data-id=${word.id}"
+                                    onclick="openDeleteWordModal(this)">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Create Word Modal -->
+        <div id="createWordModal" class="modal">
+            <div class="modal-content">
+                <h2>Add New Word</h2>
+                <form id="createWordForm" method="post" enctype="multipart/form-data">
+                    <input type="text" name="word" placeholder="Word" required>
+                    <input type="text" name="pronunciation" placeholder="Pronunciation">
+                    <input type="text" name="type" placeholder="Type">
+                    <textarea name="meaning" placeholder="Meaning"></textarea>
+                    <textarea name="example" placeholder="Example"></textarea>
+                    <input type="file" name="imageFile">
+                    <input type="hidden" name="flashcardId" th:value="${flashcard.id}">
+                    <button type="submit" class="save-btn">Save</button>
+                    <button type="button" class="cancel-btn" onclick="closeModal('createWordModal')">Cancel</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Edit Word Modal -->
+        <div id="editWordModal" class="modal">
+            <div class="modal-content">
+                <h2>Sửa từ</h2>
+                <form id="editWordForm" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="id" id="editWordId">
+                    <label for="editWord">Từ</label>
+                    <input type="text" name="word" id="editWord" placeholder="Word" required>
+                    <label for="editPronunciation">Phát âm</label>
+                    <input type="text" name="pronunciation" id="editPronunciation" placeholder="Pronunciation">
+                    <label for="editWordType">Loại</label>
+                    <input type="text" name="type" id="editWordType" placeholder="Type">
+                    <label for="editMeaning">Nghĩa</label>
+                    <textarea name="meaning" id="editMeaning" placeholder="Meaning"></textarea>
+                    <label for="editExample">Ví dụ</label>
+                    <textarea name="example" id="editExample" placeholder="Example"></textarea>
+                    <input type="file" name="imageFile">
+                    <button type="submit" class="save-btn">Save</button>
+                    <button type="button" class="cancel-btn" onclick="closeModal('editWordModal')">Cancel</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Delete Word Modal -->
+        <div id="deleteWordModal" class="modal">
+            <div class="modal-content">
+                <h2>Xác nhận xóa</h2>
+                <p>Bạn có chắc muốn xóa từ này?</p>
+                <form id="deleteWordForm" method="post">
+                    <input type="hidden" name="id" id="deleteWordId">
+                    <button type="submit" class="save-btn">Xóa</button>
+                    <button type="button" class="cancel-btn" onclick="closeModal('deleteWordModal')">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

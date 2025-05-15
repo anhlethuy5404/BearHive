@@ -16,18 +16,19 @@
             </div>
             <nav class="nav-menu">
                 <a th:href="@{/admin/dashboard}" th:classappend="${activePage == 'dashboard' ? 'active' : ''}" class="nav-item">
-                    <i class="fa fa-th-large"></i> Dashboard
+                    <i class="fa fa-th-large"></i>
+                    <span>Dashboard</span> 
                 </a>
                 <a th:href="@{/admin/users}" th:classappend="${activePage == 'users' ? 'active' : ''}" class="nav-item">
-                    <i class="fa fa-users"></i> Users <span class="badge">8</span>
+                    <i class="fa fa-users"></i> Users
                 </a>
                 <a th:href="@{/admin/tests}" th:classappend="${activePage == 'tests' ? 'active' : ''}" class="nav-item">
                     <i class="fa fa-file"></i> Test
                 </a>
-                <a href="#" class="nav-item">
+                <a th:href="@{/admin/flashcards}" th:classappend="${activePage == 'flashcards' ? 'active' : ''}" class="nav-item">
                     <i class="fa fa-clone"></i> Flashcard
                 </a>
-                <a href="#" class="nav-item">
+                <a th:href="@{/admin/dictations}" th:classappend="${activePage == 'dictations' ? 'active' : ''}" class="nav-item">
                     <i class="fa fa-check-square-o"></i> Dictation
                 </a>
                 <a href="/home" class="nav-item logout">
@@ -54,6 +55,29 @@
                         </div>
                     </div>
                 </div>
+                <div th:case="'flashcards'">
+                    <div th:switch="${subPage}">
+                        <div th:case="'flashcard-list'">
+                            <div th:insert="~{adminflashcard :: content}"></div>
+                        </div>
+                        <div th:case="'flashcard-create'">
+                            <div th:insert="~{createflashcard :: content}"></div>
+                        </div>
+                        <div th:case="'flashcard-words'">
+                            <div th:insert="~{flashcardwords :: content}"></div>
+                        </div>
+                    </div>
+                </div>
+                <div th:case="'dictations'">
+                    <div th:switch="${subPage}">
+                        <div th:case="'dictation-list'">
+                            <div th:insert="~{admindictation :: content}"></div>
+                        </div>
+                        <div th:case="'dictation-create'">
+                            <div th:insert="~{createdictation :: content}"></div>
+                        </div>
+                    </div>
+                </div>
                 <div th:case="*">
                     <p>Trang không tồn tại!</p>
                 </div>
@@ -61,5 +85,89 @@
         </div>
         
     </div>
+    <script>
+        window.onload = function() {
+            window.openEditModal = function(button) {
+                const id = button.getAttribute('data-id');
+                const title = button.getAttribute('data-title');
+                const type = button.getAttribute('data-type');
+                const description = button.getAttribute('data-description');
+                const difficulty = button.getAttribute('data-difficulty');
+                const questions = button.getAttribute('data-questions');
+
+                const editIdInput = document.getElementById('editId');
+                if (editIdInput) {
+                    editIdInput.value = id;
+                    document.getElementById('editTitle').value = title || '';
+                    document.getElementById('editType').value = type || '';
+                    document.getElementById('editDescription').value = description || '';
+                    document.getElementById('editDifficulty').value = difficulty || 'Easy';
+                    document.getElementById('editQuestions').value = questions || 0;
+                    document.getElementById('editForm').action = '/admin/flashcards/edit';
+                    document.getElementById('editModal').style.display = 'block';
+                } else {
+                    console.error("Không tìm thấy phần tử editId");
+                }
+            };
+
+            window.openDeleteModal = function(button) {
+                const deleteIdInput = document.getElementById('deleteId');
+                if (deleteIdInput) {
+                    deleteIdInput.value = button.getAttribute('data-id');
+                    document.getElementById('deleteForm').action = '/admin/flashcards/delete';
+                    document.getElementById('deleteModal').style.display = 'block';
+                } else {
+                    console.error("Không tìm thấy phần tử deleteId");
+                }
+            };
+
+            window.openCreateWordModal = function() {
+                const form = document.getElementById('createWordForm');
+                form.action = '/admin/flashcards/' + document.querySelector('input[name="flashcardId"]').value + '/words/create';
+                document.getElementById('createWordModal').style.display = 'block';
+            };
+
+            window.openEditWordModal = function(button) {
+                const id = button.getAttribute('data-id');
+                const word = button.getAttribute('data-word');
+                const pronunciation = button.getAttribute('data-pronunciation');
+                const type = button.getAttribute('data-type');
+                const meaning = button.getAttribute('data-meaning');
+                const example = button.getAttribute('data-example');
+
+                const editWordIdInput = document.getElementById('editWordId');
+                if (editWordIdInput) {
+                    editWordIdInput.value = id;
+                    document.getElementById('editWord').value = word || '';
+                    document.getElementById('editPronunciation').value = pronunciation || '';
+                    document.getElementById('editWordType').value = type || '';
+                    document.getElementById('editMeaning').value = meaning || '';
+                    document.getElementById('editExample').value = example || '';
+                    document.getElementById('editWordForm').action = '/admin/flashcards/' + document.querySelector('input[name="flashcardId"]').value + '/words/edit';
+                    document.getElementById('editWordModal').style.display = 'block';
+                } else {
+                    console.error("Không tìm thấy phần tử editWordId");
+                }
+            };
+
+            window.openDeleteWordModal = function(button) {
+                const deleteWordIdInput = document.getElementById('deleteWordId');
+                if (deleteWordIdInput) {
+                    deleteWordIdInput.value = button.getAttribute('data-id');
+                    document.getElementById('deleteWordForm').action = '/admin/flashcards/' + document.querySelector('input[name="flashcardId"]').value + '/words/delete';
+                    document.getElementById('deleteWordModal').style.display = 'block';
+                } else {
+                    console.error("Không tìm thấy phần tử deleteWordId");
+                }
+            };
+
+            window.closeModal = function(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            };
+        };
+    </script>
 </body>
 </html>

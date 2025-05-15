@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BearHive - English Practice</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" th:href="@{/css/admin-info.css}">
+    </head>
+    <body>
+        <div th:fragment="content">
+            <div class="content">
+                <div class="content-header">
+                    <h1>English Dictations</h1>
+                    <p>Manage English dictations</p>
+                </div>
+                <div class="table-controls">
+                    <div class="search-users">
+                        <i class="fa fa-search"></i>
+                        <input type="text" placeholder="Search dictations...">
+                    </div>
+                    <div class="create-test">
+                        <i class="fa fa-plus" style="color: white;"></i>
+                        <a th:href="@{/admin/dictations/create}" class="create-btn">CREATE</a>
+                    </div>
+                </div>
+                <div class="test-list">
+                    <div th:each="dictation : ${dictations}" class="test-card">
+                        <img th:src="${dictation.coveredImage}">
+                        <h3 th:text="${dictation.title}"></h3>
+                        <p th:text="${dictation.description}"></p>
+                        <div class="tags">
+                            <span th:text="${dictation.type}" class="type"></span>
+                            <span th:class="'level ' + ${dictation.difficulty.toLowerCase()}" th:text="${dictation.difficulty}"></span>
+                        </div>
+                        <div class="questions">
+                            <span th:text="'Created: ' + ${dictation.createdDate}"></span>
+                            <span th:text="'Last modified: ' + ${dictation.updateDate}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

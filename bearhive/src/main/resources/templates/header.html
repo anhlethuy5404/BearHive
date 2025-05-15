@@ -14,9 +14,11 @@
                 </div>
                 <div class="nav-links">
                     <a href="/">Home</a>
-                    <a href="/test">English Test</a>
+                    <a href="/course">Course</a>
+                    <a href="/test">Practice Test</a>
                     <a href="/flashcard">Flashcard</a>
                     <a href="/dictation">Dictation</a>
+                    <a href="/cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
                     <div th:if="${session.loggedUser}" class="user-info">
                         <img th:src="@{${session.loggedUser.avatar}}" class="avatar">
                         <div class="dropdown">
@@ -25,6 +27,7 @@
                             </span>
                             <div class="dropdown-menu" id="dropdown-menu">
                                 <a th:if="${session.loggedUser.role == 'USER'}" th:href="@{/info/{id}(id=${session.loggedUser.id})}">Thông tin cá nhân</a>
+                                <a th:if="${session.loggedUser.role == 'USER'}" th:href="@{/mycourse/{id}(id=${session.loggedUser.id})}">Khóa học của tôi</a>
                                 <a th:if="${session.loggedUser.role == 'ADMIN'}" th:href="@{/admin/dashboard}">Thông tin cá nhân</a>
                                 <a href="/logout">Logout</a>
                             </div>

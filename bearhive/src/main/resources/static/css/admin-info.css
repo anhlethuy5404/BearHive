@@ -33,30 +33,65 @@ body {
 
 /* ========== ANIMATIONS ========== */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-20px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
+  0% {
+    background-position: -1000px 0;
+  }
+
+  100% {
+    background-position: 1000px 0;
+  }
 }
 
 @keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-5px); }
-  100% { transform: translateY(0px); }
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
 }
 
 /* ========== LAYOUT ========== */
@@ -273,7 +308,7 @@ body {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
   opacity: 0;
   transition: var(--transition);
 }
@@ -542,6 +577,7 @@ body {
   padding: 15px;
   border-bottom: 1px solid var(--gray-light);
   transition: var(--transition);
+  vertical-align: middle;
 }
 
 .user-table tr:hover td {
@@ -569,14 +605,6 @@ body {
 
 .action-btn:hover {
   color: var(--primary-dark);
-}
-
-.action-btn:first-child:hover {
-  color: var(--info);
-}
-
-.action-btn:last-child:hover {
-  color: var(--danger);
 }
 
 /* ========== TEST CARDS ========== */
@@ -624,6 +652,7 @@ body {
   color: var(--gray);
   font-size: 14px;
   line-height: 1.5;
+  height: 40px;
 }
 
 .tags {
@@ -645,19 +674,22 @@ body {
   color: var(--primary-dark);
 }
 
-.level.beginner {
-  background-color: rgba(76, 175, 80, 0.2);
-  color: var(--success);
+.level.beginner,
+.level.easy {
+  background-color: #4caf50;
+  color: rgb(28, 28, 28);
 }
 
-.level.intermediate {
-  background-color: rgba(33, 150, 243, 0.2);
-  color: var(--info);
+.level.intermediate,
+.level.medium {
+  background-color: #ffa500;
+  color: rgb(28, 28, 28);
 }
 
-.level.advanced {
-  background-color: rgba(156, 39, 176, 0.2);
-  color: #9c27b0;
+.level.advanced,
+.level.hard {
+  background-color: #f44336;
+  color: rgb(28, 28, 28);
 }
 
 .question {
@@ -695,6 +727,11 @@ body {
   transform: translateX(-5px);
 }
 
+.back-to-tests a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .form-container {
   animation: fadeIn 0.5s ease-out;
 }
@@ -728,6 +765,7 @@ form {
   border-radius: var(--border-radius);
   font-size: 14px;
   transition: var(--transition);
+  font: inherit;
 }
 
 .form-group input[type="text"]:focus,
@@ -772,26 +810,26 @@ form {
   transition: var(--transition);
 }
 
-.radio-group input[type="radio"]:checked + .radio-label.beginner {
+.radio-group input[type="radio"]:checked+.radio-label.beginner {
   background-color: rgba(76, 175, 80, 0.1);
   border-color: var(--success);
   color: var(--success);
 }
 
-.radio-group input[type="radio"]:checked + .radio-label.intermediate {
-  background-color: rgba(33, 150, 243, 0.1);
-  border-color: var(--info);
-  color: var(--info);
+.radio-group input[type="radio"]:checked+.radio-label.intermediate {
+  background-color: rgba(243, 219, 33, 0.1);
+  border-color: #ffa500;
+  color: #ffa500;
 }
 
-.radio-group input[type="radio"]:checked + .radio-label.advanced {
-  background-color: rgba(156, 39, 176, 0.1);
-  border-color: #9c27b0;
-  color: #9c27b0;
+.radio-group input[type="radio"]:checked+.radio-label.advanced {
+  background-color: rgba(176, 48, 39, 0.1);
+  border-color: #f44336;
+  color: #f44336;
 }
 
 input[type="file"] {
-  padding: 10px;
+  padding: 14px;
   background-color: #f8f9fa;
   border: 1px dashed var(--gray-light);
   border-radius: var(--border-radius);
@@ -826,6 +864,162 @@ input[type="file"]:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Styles for action buttons */
+.actions {
+  height: 100%; 
+  text-align: left; 
+  vertical-align: middle; 
+}
+
+.actions .action-btn {
+  display: inline-block;
+  padding: 8px 12px;
+  margin: 5px 0;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  color: white;
+}
+
+.actions .edit-btn {
+  background-color: var(--info);
+}
+
+.actions .edit-btn:hover {
+  background-color: #1976d2;
+}
+
+.actions .delete-btn {
+  background-color: var(--danger);
+}
+
+.actions .delete-btn:hover {
+  background-color: #d32f2f;
+}
+
+.actions .manage-btn {
+  background-color: var(--success);
+}
+
+.actions .manage-btn:hover {
+  background-color: #388e3c;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  margin: 2% auto;
+  padding: 20px;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.modal-content h2 {
+  margin-bottom: 10px;
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 0 0 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font: inherit;
+}
+
+.modal-content input:focus,
+.modal-content select:focus,
+.modal-content textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 5px rgba(255, 193, 7, 0.5);
+}
+
+.modal-content label {
+  text-align: left;
+  display: block;
+  font-weight: 500;
+}
+
+.modal-content button {
+  margin-top: 5px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.save-btn {
+  background-color: var(--primary, #FFD100);
+  color: var(--text, #333333);
+  width: 110px;
+}
+
+.save-btn:hover {
+  background-color: var(--primary-dark, #FFA000);
+}
+
+.cancel-btn {
+  background-color: transparent;
+  border: 1px solid var(--primary, #FFD100) !important;
+  color: var(--text, #333333);
+  width: 110px;
+}
+
+.cancel-btn:hover {
+  background-color: var(--primary-light, #FFECB3);
+}
+
+#deleteForm,
+#editForm,
+#deleteWordForm,
+#editWordForm {
+  box-shadow: none;
+}
+
+.create-btn-2 {
+  padding: 10px 15px;
+  border-radius: var(--border-radius);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background-color: var(--primary);
+  color: white;
+  margin-bottom: 15px;
+  margin-left: auto;
+  display: block;
+}
+
+.create-btn-2:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 /* ========== ERROR MESSAGE ========== */
 .error-message {
   background-color: rgba(244, 67, 54, 0.1);
@@ -855,69 +1049,69 @@ input[type="file"]:hover {
     width: 70px;
     overflow: hidden;
   }
-  
+
   .sidebar:hover {
     width: 250px;
   }
-  
+
   .logo {
     padding: 15px 0;
   }
-  
+
   .logo h2 {
     display: none;
   }
-  
+
   .sidebar:hover .logo h2 {
     display: block;
   }
-  
+
   .nav-item {
     padding: 12px;
     justify-content: center;
   }
-  
+
   .nav-item i {
     margin-right: 0;
     font-size: 18px;
   }
-  
+
   .sidebar:hover .nav-item {
     padding: 12px 20px;
     justify-content: flex-start;
   }
-  
+
   .sidebar:hover .nav-item i {
     margin-right: 12px;
   }
-  
+
   .badge {
     display: none;
   }
-  
+
   .sidebar:hover .badge {
     display: block;
   }
-  
+
   .main-content {
     margin-left: 70px;
     width: calc(100% - 70px);
   }
-  
+
   .stats {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .inline-group {
     flex-direction: column;
   }
-  
+
   .table-controls {
     flex-direction: column;
     align-items: stretch;
     gap: 15px;
   }
-  
+
   .search-users {
     width: 100%;
   }
@@ -927,11 +1121,11 @@ input[type="file"]:hover {
   .stats {
     grid-template-columns: 1fr;
   }
-  
+
   .test-list {
     grid-template-columns: 1fr;
   }
-  
+
   .radio-group {
     flex-direction: column;
     gap: 10px;

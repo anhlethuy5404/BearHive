@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BearHive - English Practice</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" th:href="@{/css/header.css}">
+        <link rel="stylesheet" th:href="@{/css/course.css}">
+    </head>
+<body>
+    <div th:insert="~{header :: header}"></div>
+    <div class="container">
+        <h1 class="page-title">English Learning Courses</h1>
+
+        <div class="course-nav">
+            <div class="course-nav-item" data-target="toeic">TOEIC</div>
+            <div class="course-nav-item" data-target="ielts-academic">IELTS Academic</div>
+            <div class="course-nav-item" data-target="ielts-general">IELTS General</div>
+            <div class="course-nav-item" data-target="ielts-writing-speaking">IELTS Writing and Speaking</div>
+            <div class="course-nav-item" data-target="basic-english">Basic English</div>
+        </div>
+
+        <!-- TOEIC Section -->
+        <section id="toeic" class="course-section">
+            <h2 class="course-section-title">TOEIC Courses</h2>
+            <div class="course-grid">
+                <div class="course-card" th:each="course : ${courses}">
+                    <img th:src="${course.imageUrl}" class="course-image">
+                    <div class="course-content">
+                        <h3 class="course-title" th:text="${course.title}"></h3>
+                        <div class="course-highlights">
+                            <div class="highlight">
+                                <div class="highlight-value">24</div>
+                                <div>Lessons</div>
+                            </div>
+                            <div class="highlight">
+                                <div class="highlight-value">48</div>
+                                <div>Hours</div>
+                            </div>
+                            <div class="highlight">
+                                <div class="highlight-value">Beginner</div>
+                                <div>Level</div>
+                            </div>
+                        </div>
+                        <p class="course-description" th:text="${course.description}"></p>
+                        <div class="course-footer">
+                            <div class="course-price">
+                                <span class="original-price">[[${course.originalPrice}]]đ</span>
+                                [[${course.discountedPrice}]]đ
+                                <span class="discount-badge">Giảm [[${T(java.lang.Math).round((1 - course.discountedPrice / course.originalPrice) * 100)}]]%</span>
+                            </div>
+                            <a th:href="@{/course/{id}(id=${course.id})}" class="btn btn-primary">Đăng ký ngay</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- IELTS Academic Section -->
+        <section id="ielts-academic" class="course-section">
+            <h2 class="course-section-title">IELTS Academic Courses</h2>
+            <div class="course-grid">
+                
+            </div>
+        </section>
+
+        <!-- IELTS General Section -->
+        <section id="ielts-general" class="course-section">
+            <h2 class="course-section-title">IELTS General Training Courses</h2>
+            <div class="course-grid">
+                
+            </div>
+        </section>
+
+        <!-- IELTS Writing and Speaking Section -->
+        <section id="ielts-writing-speaking" class="course-section">
+            <h2 class="course-section-title">IELTS Writing and Speaking Courses</h2>
+            <div class="course-grid">
+                
+            </div>
+        </section>
+
+        <!-- Basic English Section -->
+        <section id="basic-english" class="course-section">
+            <h2 class="course-section-title">Basic English Courses</h2>
+            <div class="course-grid">
+                
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const courseNavItems = document.querySelectorAll('.course-nav-item');
+            courseNavItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    courseNavItems.forEach(nav => nav.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    
+                    const targetId = this.getAttribute('data-target');
+                    const targetSection = document.getElementById(targetId);
+                    
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            const courseSections = document.querySelectorAll('.course-section');
+            
+            function highlightNavOnScroll() {
+                let scrollPosition = window.scrollY + 150; 
+                
+                courseSections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+                    
+                    if (scrollPosition >= sectionTop && 
+                        scrollPosition < sectionTop + sectionHeight) {
+                        courseNavItems.forEach(item => item.classList.remove('active'));
+                        
+                        const activeNav = document.querySelector(`.course-nav-item[data-target="${sectionId}"]`);
+                        if (activeNav) {
+                            activeNav.classList.add('active');
+                        }
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', highlightNavOnScroll);
+            
+            courseNavItems[0].classList.add('active');
+        });
+    </script>
+    <script th:src="@{../js/header.js}"></script>
+</body>
+</html>
