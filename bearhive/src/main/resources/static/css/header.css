@@ -7,54 +7,65 @@
     z-index: 1000;
     transition: all 0.3s ease;
 }
+
 .header .nav-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 13px 20px;
 }
+
 .header .nav-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 .header .logo {
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
 }
+
 .header .logo img {
     height: 42px;
 }
+
 .header .logo span {
     font-size: 28px;
     color: #D97706;
     font-weight: bold;
     margin-left: 10px;
 }
+
 .header .nav-links {
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
 }
+
 .header .nav-links a {
     margin-right: 20px;
     text-decoration: none;
     color: #4B5563;
     font-weight: 500;
 }
+
 .header .nav-links a:hover {
     color: #D97706;
 }
+
 .header .user-info {
     display: flex;
     align-items: center;
 }
+
 .header .avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     margin-right: 10px;
 }
+
 .header .login-btn {
     background-color: #FBBF24;
     color: white;
@@ -64,9 +75,11 @@
     cursor: pointer;
     font-size: 16px;
 }
+
 .header .login-btn:hover {
     background-color: #D97706;
 }
+
 .header .user-name {
     display: flex;
     align-items: center;
@@ -74,9 +87,11 @@
     cursor: pointer;
     color: #4B5563;
 }
+
 .header .user-name:hover {
     color: #D97706;
 }
+
 .header .dropdown {
     position: relative;
 }
@@ -110,4 +125,20 @@
 
 .header .show {
     display: block;
+}
+
+.cart-icon {
+    position: relative;
+    display: inline-block;
+}
+
+#cart-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
 }

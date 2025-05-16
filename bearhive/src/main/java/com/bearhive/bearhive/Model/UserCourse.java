@@ -28,4 +28,5 @@ public class UserCourse {
     @JoinColumn(name = "user_id")
     private User user;
     
+    private String status; // "CART" or "PURCHASED"
 }

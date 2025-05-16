@@ -138,6 +138,7 @@ body {
     color: var(--text-light);
     margin-bottom: 15px;
     font-size: 15px;
+    height: 50px;
 }
 
 .course-features {

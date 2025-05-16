@@ -48,9 +48,13 @@
                             course.originalPrice) * 100)}]]%</span>
                     </div>
                     <p class="price-note">Giá ưu đãi sẽ kết thúc trong 3 ngày tới</p>
-                    <a th:if="${isLoggedIn}" th:href="@{/cart}" class="btn btn-accent">Đăng ký ngay</a>
+                    <a th:if="${isLoggedIn}" th:href="@{/cart}" class="btn btn-accent" th:value="${course.id}">Đăng ký ngay</a>
                     <a th:unless="${isLoggedIn}" onclick="showLoginModal()" class="btn btn-accent">Đăng ký ngay</a>
-                    <a th:if="${isLoggedIn}" class="btn btn-cart">Cho vào giỏ hàng</a>
+                    <th:block th:if="${isLoggedIn}">
+                        <form th:action="@{/course/{id}/add-to-cart(id=${course.id})}" method="post">
+                            <button type="submit" class="btn btn-cart">Cho vào giỏ hàng</button>
+                        </form>
+                    </th:block>
                     <a th:unless="${isLoggedIn}" onclick="showLoginModal()" class="btn btn-cart">Cho vào giỏ hàng</a>
                 </div>
             </div>

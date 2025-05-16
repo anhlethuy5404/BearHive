@@ -18,7 +18,10 @@
                     <a href="/test">Practice Test</a>
                     <a href="/flashcard">Flashcard</a>
                     <a href="/dictation">Dictation</a>
-                    <a href="/cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+                    <a href="/cart">
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                        (<span th:text="${cartSize != null ? cartSize : 0}">0</span>)
+                    </a>
                     <div th:if="${session.loggedUser}" class="user-info">
                         <img th:src="@{${session.loggedUser.avatar}}" class="avatar">
                         <div class="dropdown">

@@ -31,47 +31,54 @@
         </div>
 
         <div class="tabs">
-            <div class="tab active" data-tab="cart">Giỏ hàng (1)</div>
+            <div class="tab active" data-tab="cart">Giỏ hàng (<span
+                    th:text="${cartSize != null ? cartSize : 0}">0</span>) </div>
             <div class="tab" data-tab="payment">Thanh toán</div>
+            <div class="tab" data-tab="confirmation">Xác nhận</div>
         </div>
 
         <div class="tab-content active" id="cart">
             <div class="checkout-container">
                 <div class="cart-section">
                     <h2 class="section-title">Các khóa học</h2>
-                    
-                    <div class="cart-item">
-                        <img src="/placeholder.svg?height=80&width=120" alt="IELTS Academic Foundation" class="item-image">
+                    <div th:if="${cartItems.isEmpty()}">
+                        <p>Giỏ hàng của bạn đang trống.</p>
+                    </div>
+                    <div class="cart-item" th:each="item, iterStat : ${cartItems}">
+                        <input type="checkbox" class="course-checkbox" th:value="${item.course.id}"
+                            th:data-price="${item.course.discountedPrice}" onchange="updateTotal()">
+                        <img th:src="${item.course.imageUrl}" class="item-image">
                         <div class="item-details">
-                            <h3 class="item-title">IELTS Academic Foundation</h3>
-                            <p class="item-description">Build a strong foundation for the IELTS Academic test. Ideal for students targeting Band 5.5-6.5.</p>
+                            <h3 class="item-title" th:text="${item.course.title}"></h3>
+                            <p class="item-description" th:text="${item.course.description}"></p>
                             <div class="item-actions">
                                 <div class="item-price">
-                                    <span class="original-price">899000đ</span>
-                                    699000đ
+                                    <span class="original-price">[[${#numbers.formatInteger(item.course.originalPrice,
+                                        0, 'COMMA')}]]đ</span>
+                                    [[${#numbers.formatInteger(item.course.discountedPrice, 0, 'COMMA')}]]đ
                                 </div>
-                                <button class="action-btn remove-btn">
-                                    <span>×</span> Bỏ
-                                </button>
+                                <form th:action="@{/cart/remove/{id}(id=${item.id})}" method="post">
+                                    <button type="submit" class="action-btn remove-btn">× Bỏ</button>
+                                </form>
                             </div>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
 
                 <div class="summary-section">
                     <h2 class="section-title">Hóa đơn</h2>
-                    
+
                     <div class="summary-item">
-                        <div>Khóa học (1)</div>
-                        <div>899000đ</div>
+                        <span>Khóa học (<span id="course-count">0</span>)</span>
+                        <span id="course-total">0đ</span>
                     </div>
                     <div class="summary-item">
-                        <div>Giảm giá</div>
-                        <div>-200000đ</div>
+                        <span>Giảm giá</span>
+                        <span id="discount">0đ</span>
                     </div>
                     <div class="summary-item summary-total">
-                        <div>Tổng</div>
-                        <div>699000đ</div>
+                        <span>Tổng</span>
+                        <span id="total">0đ</span>
                     </div>
 
                     <div class="coupon-section">
@@ -81,27 +88,30 @@
                         </form>
                     </div>
 
-                    <button class="btn btn-primary checkout-btn" id="proceed-to-payment-btn">Chuyển sang bước thanh toán</button>
+                    <button class="btn btn-primary checkout-btn" id="proceed-to-payment-btn">Chuyển sang bước thanh
+                        toán</button>
                 </div>
             </div>
-        </div>        
+        </div>
 
         <div class="tab-content" id="payment">
             <div class="checkout-container">
                 <div class="cart-section">
                     <h2 class="section-title">Thông tin thanh toán</h2>
-                    
+
                     <div class="payment-methods">
                         <div class="payment-method selected" data-method="card">
-                            <div class="payment-icon"><img th:src="@{/image/payment/momo_icon_square_pinkbg_RGB-1024x1024.png}"></div>
+                            <div class="payment-icon"><img
+                                    th:src="@{/image/payment/momo_icon_square_pinkbg_RGB-1024x1024.png}"></div>
                             <div class="payment-label">MoMo</div>
                         </div>
                         <div class="payment-method" data-method="bank">
-                            <div class="payment-icon"><img th:src="@{/image/payment/vnpay-logo-vinadesign-25-12-57-55.jpg}"></div>
+                            <div class="payment-icon"><img
+                                    th:src="@{/image/payment/vnpay-logo-vinadesign-25-12-57-55.jpg}"></div>
                             <div class="payment-label">VnPay</div>
                         </div>
                     </div>
-                    
+
                     <div class="payment-details active" id="card-payment">
                         <!-- <div class="form-group">
                             <label class="form-label">Cardholder Name</label>
@@ -125,216 +135,186 @@
                             </div>
                         </div> -->
                     </div>
-                    
-                    <div class="payment-details" id="bank-payment">
-                        <!-- <div class="form-group">
-                            <label class="form-label">Account Holder Name</label>
-                            <input type="text" class="form-control" placeholder="Your full name">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Bank Name</label>
-                            <input type="text" class="form-control" placeholder="Name of your bank">
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">Account Number</label>
-                                <input type="text" class="form-control" placeholder="Your account number">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Routing Number</label>
-                                <input type="text" class="form-control" placeholder="Bank routing number">
-                            </div>
-                        </div> -->
-                    </div>
                 </div>
 
                 <div class="summary-section">
                     <h2 class="section-title">Hóa đơn</h2>
-                    
+
                     <div class="summary-item">
-                        <div>Khóa học (1)</div>
-                        <div>899000đ</div>
+                        <div>Khóa học (<span id="course-count">0</span>)</div>
+                        <div><span id="course-total">0đ</span></div>
                     </div>
                     <div class="summary-item">
                         <div>Giảm giá</div>
-                        <div>-200000đ</div>
+                        <div><span id="discount">0đ</span></div>
                     </div>
                     <div class="summary-item summary-total">
                         <div>Tổng</div>
-                        <div>699000đ</div>
+                        <div><span id="total">0đ</span></div>
                     </div>
 
                     <button class="btn btn-accent checkout-btn" id="complete-payment-btn">Xác nhận thanh toán</button>
-                    <button class="btn btn-outline checkout-btn" style="margin-top: 10px;" id="back-to-review-btn">Quay về giỏ hàng</button>
-                    
+                    <button class="btn btn-outline checkout-btn" style="margin-top: 10px;" id="back-to-review-btn">Quay
+                        về giỏ hàng</button>
+
                 </div>
             </div>
         </div>
-    </div>
+        <div class="tab-content" id="confirmation">
+            <div class="payment-success">
+                <div class="success-icon">✓</div>
+                <h2 class="modal-title">Thanh toán thành công!</h2>
+                <p class="confirmation-text">Cảm ơn vì đã mua khóa học. Bạn giờ đã có thể học khóa học này rồi.</p>
 
-    <!-- Confirmation Modal -->
-    <div id="confirmation-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <div class="success-icon">✓</div>
-            <h2 class="modal-title">Payment Successful!</h2>
-            <p class="confirmation-text">Thank you for your purchase. Your access to the courses has been activated.</p>
-            
-            <div class="confirmation-details">
-                <div class="confirmation-item">
-                    <span class="label">Order Number:</span>
-                    <span>ELC-25790</span>
+                <div class="confirmation-details">
+                    <div class="confirmation-item">
+                        <span class="label">Mã hóa đơn:</span>
+                        <span>ELC-25790</span>
+                    </div>
+                    <div class="confirmation-item">
+                        <span class="label">Ngày:</span>
+                        <span>Ngày 11 tháng 5 năm 2025</span>
+                    </div>
+                    <div class="confirmation-item">
+                        <span class="label">Tổng tiền:</span>
+                        <span id="invoice-total">0đ</span>
+                    </div>
                 </div>
-                <div class="confirmation-item">
-                    <span class="label">Date:</span>
-                    <span>May 11, 2025</span>
-                </div>
-                <div class="confirmation-item">
-                    <span class="label">Total Amount:</span>
-                    <span>$546.70</span>
-                </div>
+
+                <button class="btn btn-primary checkout-btn">Xem khóa học của tôi</button>
             </div>
-            
-            <button class="btn btn-primary checkout-btn">View My Courses</button>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const tabs = document.querySelectorAll('.tab');
             const tabContents = document.querySelectorAll('.tab-content');
-            
+
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
                     const target = tab.getAttribute('data-tab');
                     tabs.forEach(t => t.classList.remove('active'));
                     tabContents.forEach(content => content.classList.remove('active'));
-                    
+
                     tab.classList.add('active');
                     document.getElementById(target).classList.add('active');
-                    
+
                     const steps = document.querySelectorAll('.step');
                     steps.forEach(step => step.classList.remove('active'));
-                    
+
                     if (target === 'cart') {
                         steps[0].classList.add('active');
                     } else if (target === 'payment') {
                         steps[1].classList.add('active');
+                    } else if (target === 'confirmation') {
+                        steps[2].classList.add('active');
                     }
+
                 });
             });
-            
+
             const paymentMethods = document.querySelectorAll('.payment-method');
             const paymentDetails = document.querySelectorAll('.payment-details');
-            
+
             paymentMethods.forEach(method => {
                 method.addEventListener('click', () => {
                     const target = method.getAttribute('data-method');
                     paymentMethods.forEach(m => m.classList.remove('selected'));
-                    
+
                     method.classList.add('selected');
-                    
+
                     paymentDetails.forEach(details => details.classList.remove('active'));
-                    
+
                     document.getElementById(`${target}-payment`).classList.add('active');
                 });
             });
-            
+
             // Button actions
-            document.getElementById('proceed-to-payment-btn').addEventListener('click', function() {
+            document.getElementById('proceed-to-payment-btn').addEventListener('click', function () {
                 tabs.forEach(t => t.classList.remove('active'));
                 tabContents.forEach(content => content.classList.remove('active'));
-                
+
                 document.querySelector('[data-tab="payment"]').classList.add('active');
                 document.getElementById('payment').classList.add('active');
-                
+
                 const steps = document.querySelectorAll('.step');
                 steps.forEach(step => step.classList.remove('active'));
                 steps[1].classList.add('active');
+
+                // Đồng bộ hóa đơn sang tab payment
+                document.querySelector('#payment #course-count').textContent = document.querySelector('#cart #course-count').textContent;
+                document.querySelector('#payment #course-total').textContent = document.querySelector('#cart #course-total').textContent;
+                document.querySelector('#payment #discount').textContent = document.querySelector('#cart #discount').textContent;
+                document.querySelector('#payment #total').textContent = document.querySelector('#cart #total').textContent;
             });
-            
-            document.getElementById('back-to-cart-btn').addEventListener('click', function() {
+
+            document.getElementById('back-to-review-btn').addEventListener('click', function () {
                 tabs.forEach(t => t.classList.remove('active'));
                 tabContents.forEach(content => content.classList.remove('active'));
-                
+
                 document.querySelector('[data-tab="cart"]').classList.add('active');
                 document.getElementById('cart').classList.add('active');
+
                 const steps = document.querySelectorAll('.step');
                 steps.forEach(step => step.classList.remove('active'));
                 steps[0].classList.add('active');
             });
-            
-            document.getElementById('back-to-review-btn').addEventListener('click', function() {
+
+            document.getElementById('complete-payment-btn').addEventListener('click', function () {
                 tabs.forEach(t => t.classList.remove('active'));
                 tabContents.forEach(content => content.classList.remove('active'));
-                
-                document.querySelector('[data-tab="cart"]').classList.add('active');
-                document.getElementById('cart').classList.add('active');
-                
-                const steps = document.querySelectorAll('.step');
-                steps.forEach(step => step.classList.remove('active'));
-                steps[0].classList.add('active');
-            });
-            
-            document.getElementById('complete-payment-btn').addEventListener('click', function() {
-                document.getElementById('confirmation-modal').style.display = 'block';
-                
+                document.querySelector('[data-tab="confirmation"]').classList.add('active');
+                document.getElementById('confirmation').classList.add('active');
+
                 const steps = document.querySelectorAll('.step');
                 steps.forEach(step => step.classList.remove('active'));
                 steps[2].classList.add('active');
             });
-            
-            document.querySelector('.close-btn').addEventListener('click', function() {
-                document.getElementById('confirmation-modal').style.display = 'none';
-            });
 
-            window.addEventListener('click', function(event) {
-                const modal = document.getElementById('confirmation-modal');
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
-            
             const removeButtons = document.querySelectorAll('.remove-btn');
             removeButtons.forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     const cartItem = this.closest('.cart-item');
                     cartItem.style.height = cartItem.offsetHeight + 'px';
-                    
+
                     cartItem.style.transition = 'all 0.3s ease';
-                    
-                    setTimeout(function() {
+
+                    setTimeout(function () {
                         cartItem.style.height = '0';
                         cartItem.style.opacity = '0';
                         cartItem.style.padding = '0';
                         cartItem.style.margin = '0';
                         cartItem.style.overflow = 'hidden';
                     }, 10);
-                    
-                    setTimeout(function() {
+
+                    setTimeout(function () {
                         cartItem.remove();
-                        
+
                         const remainingItems = document.querySelectorAll('#cart .cart-item');
                         if (remainingItems.length === 0) {
                             document.querySelector('#cart .cart-section').innerHTML = '<h2 class="section-title">Course Items</h2><p class="empty-message">Your cart is empty. Add courses to continue.</p>';
                         }
                     }, 300);
                 });
-            });            
-            
-            const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
-            addToCartBtns.forEach(button => {
-                button.addEventListener('click', function() {
-                    alert('Item added to cart!');
-                });
-            });
-            
-            document.getElementById('add-all-to-cart-btn').addEventListener('click', function() {
-                alert('All wishlist items added to cart!');
             });
         });
+
+        //tính tổng tiền hóa đơn
+        function updateTotal() {
+            const checkboxes = document.querySelectorAll('.course-checkbox:checked');
+            let total = 0;
+            let courseCount = checkboxes.length;
+
+            checkboxes.forEach(checkbox => {
+                const price = parseFloat(checkbox.getAttribute('data-price'));
+                total += price;
+            });
+
+            document.getElementById('course-count').textContent = courseCount;
+            document.getElementById('course-total').textContent = total.toLocaleString('vi-VN') + 'đ';
+            document.getElementById('total').textContent = total.toLocaleString('vi-VN') + 'đ';
+        }
     </script>
     <script th:src="@{../js/header.js}"></script>
 </body>
