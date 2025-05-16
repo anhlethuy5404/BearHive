@@ -30,6 +30,10 @@ public class UserCourseService {
         return userCourseRepository.findByUserIdAndCourseIdAndStatus(userId, courseId, status);
     }
 
+    public List<UserCourse> findByUserIdAndCourseIdsAndStatus(Long userId, List<Long> courseIds, String status) {
+        return userCourseRepository.findByUserIdAndCourseIdInAndStatus(userId, courseIds, status);
+    }
+
     public long countCartItems(Long userId, String status) {
         return userCourseRepository.countByUserIdAndStatus(userId, status);
     }

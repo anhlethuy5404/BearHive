@@ -159,6 +159,11 @@
 
                 </div>
             </div>
+            <!-- form ẩn -->
+            <form id="payment-form" th:action="@{/cart/checkout}" method="post" style="display:none;">
+                <input type="hidden" name="selectedCourseIds" id="selectedCourseIds">
+                <input type="hidden" name="totalAmount" id="totalAmount">
+            </form>
         </div>
         <div class="tab-content" id="confirmation">
             <div class="payment-success">
@@ -207,9 +212,10 @@
                         steps[0].classList.add('active');
                     } else if (target === 'payment') {
                         steps[1].classList.add('active');
-                    } else if (target === 'confirmation') {
-                        steps[2].classList.add('active');
                     }
+                    // else if (target === 'confirmation') {
+                    //     steps[2].classList.add('active');
+                    // }
 
                 });
             });
@@ -262,14 +268,32 @@
             });
 
             document.getElementById('complete-payment-btn').addEventListener('click', function () {
-                tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
-                document.querySelector('[data-tab="confirmation"]').classList.add('active');
-                document.getElementById('confirmation').classList.add('active');
+                // tabs.forEach(t => t.classList.remove('active'));
+                // tabContents.forEach(content => content.classList.remove('active'));
+                // document.querySelector('[data-tab="confirmation"]').classList.add('active');
+                // document.getElementById('confirmation').classList.add('active');
 
-                const steps = document.querySelectorAll('.step');
-                steps.forEach(step => step.classList.remove('active'));
-                steps[2].classList.add('active');
+                // const steps = document.querySelectorAll('.step');
+                // steps.forEach(step => step.classList.remove('active'));
+                // steps[2].classList.add('active');
+                const checkboxes = document.querySelectorAll('.course-checkbox:checked');
+                if (checkboxes.length === 0) {
+                    alert('Please select at least one course to checkout');
+                    return;
+                }
+
+                const totalAmountText = document.querySelector('#payment #total').textContent;
+                const totalAmount = parseInt(totalAmountText.replace(/[,.đ]/g, ''));
+
+                const selectedIds = [];
+                checkboxes.forEach(checkbox => {
+                    selectedIds.push(checkbox.value);
+                });
+
+                document.getElementById('selectedCourseIds').value = selectedIds.join(',');
+                document.getElementById('totalAmount').value = totalAmount;
+
+                document.getElementById('payment-form').submit();
             });
 
             const removeButtons = document.querySelectorAll('.remove-btn');
@@ -315,6 +339,7 @@
             document.getElementById('course-total').textContent = total.toLocaleString('vi-VN') + 'đ';
             document.getElementById('total').textContent = total.toLocaleString('vi-VN') + 'đ';
         }
+
     </script>
     <script th:src="@{../js/header.js}"></script>
 </body>

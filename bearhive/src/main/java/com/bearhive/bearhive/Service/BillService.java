@@ -2,6 +2,7 @@ package com.bearhive.bearhive.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,17 @@ public class BillService {
         //     uc.setBill(bill);
         // }
         return bill;
+    }
+
+    public Bill save(Bill bill) {
+        return billRepository.save(bill);
+    }
+    
+    public Optional<Bill> findById(Long id) {
+        return billRepository.findById(id);
+    }
+    
+    public List<Bill> findByUserId(Long userId) {
+        return billRepository.findByUserId(userId);
     }
 }
