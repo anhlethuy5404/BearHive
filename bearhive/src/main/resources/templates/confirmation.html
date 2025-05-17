@@ -16,7 +16,7 @@
         <h1 class="page-title">Giỏ hàng của bạn</h1>
 
         <div class="steps">
-            <div class="step active">
+            <div class="step">
                 <div class="step-number">1</div>
                 <div class="step-label">Giỏ hàng</div>
             </div>
@@ -24,7 +24,7 @@
                 <div class="step-number">2</div>
                 <div class="step-label">Thanh toán</div>
             </div>
-            <div class="step">
+            <div class="step active">
                 <div class="step-number">3</div>
                 <div class="step-label">Xác nhận</div>
             </div>
@@ -38,7 +38,7 @@
         </div>
         
         <div class="tab-content active" id="confirmation">
-            <div class="payment-success" th:if="${message}">
+            <div class="payment-success" th:if="${success}">
                 <div class="success-icon">✓</div>
                 <h2 class="modal-title">Thanh toán thành công!</h2>
                 <p class="confirmation-text">Cảm ơn vì đã mua khóa học. Bạn giờ đã có thể học khóa học này rồi.</p>
@@ -46,15 +46,15 @@
                 <div class="confirmation-details">
                     <div class="confirmation-item">
                         <span class="label">Mã hóa đơn:</span>
-                        <span>ELC-25790</span>
+                        <span>[[${bill.billCode} + ' - ' + ${bill.orderId}]]</span>
                     </div>
                     <div class="confirmation-item">
                         <span class="label">Ngày:</span>
-                        <span>Ngày 11 tháng 5 năm 2025</span>
+                        <span th:text="${createdAtFormatted}"></span>
                     </div>
                     <div class="confirmation-item">
                         <span class="label">Tổng tiền:</span>
-                        <span id="invoice-total">0đ</span>
+                        <span id="invoice-total">[[${#numbers.formatInteger(bill.totalAmount, 0, 'COMMA')}]]đ</span>
                     </div>
                 </div>
 
@@ -64,6 +64,7 @@
                 <div class="error-icon">✗</div>
                 <h3 class="modal-title">Thanh toán thất bại!</h3>
                 <p class="confirmation-text" th:text="${error}">Lỗi không xác định.</p>
+                <a class="btn btn-secondary" th:href="@{/cart}">Quay lại giỏ hàng</a>
             </div>
         </div>
     </div>

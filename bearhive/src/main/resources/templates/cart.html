@@ -13,6 +13,7 @@
 <body>
     <div th:insert="~{header :: header}"></div>
     <div class="container">
+        <div th:if="${error}" th:text="${error}" class="alert alert-danger"></div>
         <h1 class="page-title">Giỏ hàng của bạn</h1>
 
         <div class="steps">
@@ -24,7 +25,7 @@
                 <div class="step-number">2</div>
                 <div class="step-label">Thanh toán</div>
             </div>
-            <div class="step">
+            <div class="step disabled">
                 <div class="step-number">3</div>
                 <div class="step-label">Xác nhận</div>
             </div>
@@ -34,7 +35,7 @@
             <div class="tab active" data-tab="cart">Giỏ hàng (<span
                     th:text="${cartSize != null ? cartSize : 0}">0</span>) </div>
             <div class="tab" data-tab="payment">Thanh toán</div>
-            <div class="tab" data-tab="confirmation">Xác nhận</div>
+            <div class="tab disabled" data-tab="confirmation">Xác nhận</div>
         </div>
 
         <div class="tab-content active" id="cart">
@@ -165,30 +166,6 @@
                 <input type="hidden" name="totalAmount" id="totalAmount">
             </form>
         </div>
-        <div class="tab-content" id="confirmation">
-            <div class="payment-success">
-                <div class="success-icon">✓</div>
-                <h2 class="modal-title">Thanh toán thành công!</h2>
-                <p class="confirmation-text">Cảm ơn vì đã mua khóa học. Bạn giờ đã có thể học khóa học này rồi.</p>
-
-                <div class="confirmation-details">
-                    <div class="confirmation-item">
-                        <span class="label">Mã hóa đơn:</span>
-                        <span>ELC-25790</span>
-                    </div>
-                    <div class="confirmation-item">
-                        <span class="label">Ngày:</span>
-                        <span>Ngày 11 tháng 5 năm 2025</span>
-                    </div>
-                    <div class="confirmation-item">
-                        <span class="label">Tổng tiền:</span>
-                        <span id="invoice-total">0đ</span>
-                    </div>
-                </div>
-
-                <button class="btn btn-primary checkout-btn">Xem khóa học của tôi</button>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -198,12 +175,16 @@
 
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
+                    if (tab.classList.contains('disabled')) {
+                        return;
+                    }
                     const target = tab.getAttribute('data-tab');
                     tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-
-                    tab.classList.add('active');
-                    document.getElementById(target).classList.add('active');
+                    if (target === 'cart') {
+                        tab.classList.add('active');
+                    } else if (target === 'payment') {
+                        tab.classList.add('active');
+                    } 
 
                     const steps = document.querySelectorAll('.step');
                     steps.forEach(step => step.classList.remove('active'));

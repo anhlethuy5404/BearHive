@@ -35,4 +35,7 @@ public class Bill {
     private Long totalAmount;
     private LocalDateTime createdAt;
     private String orderId;
+
+    private String momoTransactionId;
+    private String paymentStatus;
 }

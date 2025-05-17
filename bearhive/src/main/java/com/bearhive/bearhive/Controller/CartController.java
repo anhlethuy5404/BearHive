@@ -1,13 +1,15 @@
 package com.bearhive.bearhive.Controller;
 
-import java.time.LocalDateTime;
+import java.security.Principal;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.cloudinary.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -23,6 +26,7 @@ import com.bearhive.bearhive.Model.User;
 import com.bearhive.bearhive.Model.UserCourse;
 import com.bearhive.bearhive.Repository.UserRepository;
 import com.bearhive.bearhive.Service.BillService;
+import com.bearhive.bearhive.Service.MomoService;
 import com.bearhive.bearhive.Service.UserCourseService;
 
 @Controller
@@ -36,10 +40,8 @@ public class CartController {
     @Autowired
     private BillService billService;
 
-    @GetMapping("/confirmation")
-    public String showConfirmation() {
-        return "confirmation";
-    }    
+    @Autowired
+    private MomoService momoService;
 
     @GetMapping("/cart")
     public String showCart(Model model) {
@@ -76,48 +78,117 @@ public class CartController {
     }
 
     @PostMapping("/cart/checkout")
-    public String checkout(
-            @RequestParam("selectedCourseIds") String selectedCourseIdsStr,
-            @RequestParam("totalAmount") Long totalAmount,
-            RedirectAttributes redirectAttributes) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated() || 
-            "anonymousUser".equals(authentication.getPrincipal())) {
-            return "redirect:/login";
+    public String checkout(@RequestParam("selectedCourseIds") String selectedCourseIds,
+                           @RequestParam("totalAmount") String totalAmount,
+                           Principal principal,
+                           RedirectAttributes redirectAttributes) {
+        try {
+            // Convert comma-separated course IDs to List<Long>
+            List<Long> courseIdsList = Arrays.stream(selectedCourseIds.split(","))
+                    .map(Long::parseLong)
+                    .collect(Collectors.toList());
+            
+            // Get current user ID from Principal
+            Long userId = userCourseService.getUserIdFromPrincipal(principal);
+            
+            // Call MomoService to create payment request
+            String response = momoService.createPaymentRequest(totalAmount, userId, courseIdsList);
+            
+            // Parse payment URL from MoMo response
+            JSONObject jsonResponse = new JSONObject(response);
+            if (jsonResponse.has("payUrl")) {
+                String payUrl = jsonResponse.getString("payUrl");
+                return "redirect:" + payUrl;
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Failed to create payment URL");
+                return "redirect:/cart";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Payment processing error: " + e.getMessage());
+            return "redirect:/cart";
+        }
+    }
+    
+    // Handle MoMo redirect after payment
+    @GetMapping("/confirmation")
+    public String confirmPayment(@RequestParam(value = "orderId", required = false) String orderId,
+                                 @RequestParam(value = "resultCode", required = false) String resultCode,
+                                 RedirectAttributes redirectAttributes, Model model) {
+        try {
+            if (orderId != null && resultCode != null) {
+                // Process based on result code
+                switch (resultCode) {
+                    case "0":
+                        // Payment successful, check status to confirm
+                        String statusResponse = momoService.checkPaymentStatus(orderId);
+                        try{
+                        JSONObject jsonResponse = new JSONObject(statusResponse);
+                        
+                        if (jsonResponse.has("resultCode") && jsonResponse.getInt("resultCode") == 0) {
+                            redirectAttributes.addFlashAttribute("success", "Thanh toán thành công! Các khóa học của bạn đã sẵn sàng.");
+                            // Update payment status to SUCCESS
+                            String transId = jsonResponse.has("transId") ? String.valueOf(jsonResponse.get("transId")) : "";
+                            momoService.updatePaymentStatus(orderId, "SUCCESS", transId);
+                            model.addAttribute("success", "Thanh toán thành công! Các khóa học của bạn đã sẵn sàng.");
+                            Bill bill = billService.findByOrderId(orderId);
+                            model.addAttribute("bill", bill);
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+                            model.addAttribute("createdAtFormatted", bill.getCreatedAt().format(formatter));
+                            return "confirmation"; 
+                        } else {
+                            redirectAttributes.addFlashAttribute("error", "Xác minh thanh toán thất bại. Vui lòng liên hệ hỗ trợ.");
+                            momoService.updatePaymentStatus(orderId, "FAILED", null);
+                            model.addAttribute("error", "Xác minh thanh toán thất bại. Vui lòng liên hệ hỗ trợ.");
+                            return "redirect:/cart"; 
+                        }
+                    }
+                    catch (Exception ex) {
+                            ex.printStackTrace();
+                            redirectAttributes.addFlashAttribute("error", "Lỗi xử lý xác nhận thanh toán (JSON): " + ex.getMessage() + ". Phản hồi: " + statusResponse);
+                            return "redirect:/cart";
+                        }
+                    case "1001":
+                        redirectAttributes.addFlashAttribute("error", "Giao dịch bị từ chối bởi hệ thống chống gian lận.");
+                        momoService.updatePaymentStatus(orderId, "REJECTED", null);
+                        break;
+                    case "99":
+                        redirectAttributes.addFlashAttribute("warning", "Thanh toán đã bị hủy. Bạn có thể thử lại sau.");
+                        momoService.updatePaymentStatus(orderId, "CANCELLED", null);
+                        break;
+                    case "7":
+                        redirectAttributes.addFlashAttribute("error", "Giao dịch bị từ chối do số dư không đủ.");
+                        momoService.updatePaymentStatus(orderId, "INSUFFICIENT_BALANCE", null);
+                        break;
+                    case "9":
+                        redirectAttributes.addFlashAttribute("error", "Giao dịch thất bại do vượt quá hạn mức giao dịch.");
+                        momoService.updatePaymentStatus(orderId, "LIMIT_EXCEEDED", null);
+                        break;
+                    default:
+                        redirectAttributes.addFlashAttribute("error", "Thanh toán không thành công. Mã lỗi: " + resultCode);
+                        momoService.updatePaymentStatus(orderId, "FAILED", null);
+                        break;
+                }
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Phản hồi thanh toán không hợp lệ");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Lỗi xử lý xác nhận thanh toán: " + e.getMessage());
         }
         
-        String email = authentication.getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user email"));
-
-        List<Long> selectedCourseIds = Arrays.stream(selectedCourseIdsStr.split(","))
-                .map(Long::parseLong)
-                .collect(Collectors.toList());
-        
-        Bill bill = new Bill();
-        bill.setUser(user);
-        bill.setTotalAmount(totalAmount);
-        bill.setCreatedAt(LocalDateTime.now());
-        bill.setBillCode("HD" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
-        
-        List<UserCourse> selectedUserCourses = userCourseService.findByUserIdAndCourseIdsAndStatus(
-                user.getId(), selectedCourseIds, "CART");
-         
-        bill = billService.save(bill);
-
-        for (UserCourse userCourse : selectedUserCourses) {
-            userCourse.setBill(bill);
-            userCourse.setStatus("PURCHASED");
-            userCourseService.save(userCourse);
+        return "redirect:/cart"; // Redirect back to cart if error, otherwise to my-courses
+    }
+    
+    // Handle MoMo IPN (Instant Payment Notification)
+    @PostMapping("/momo-notify")
+    public ResponseEntity<String> momoNotify(@RequestBody String requestBody) {
+        try {
+            momoService.processIpnCallback(requestBody);
+            return ResponseEntity.ok("{\"status\":\"ok\"}");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("{\"status\":\"error\",\"message\":\"" + e.getMessage() + "\"}");
         }
-        
-        bill.setOrderId("ORDER" + bill.getId());
-        billService.save(bill);
-        
-        redirectAttributes.addFlashAttribute("message", "Payment successful! Your courses are now available.");
-        redirectAttributes.addFlashAttribute("billCode", bill.getBillCode());
-        
-        return "redirect:/confirmation";
     }
 }
