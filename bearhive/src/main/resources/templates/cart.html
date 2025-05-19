@@ -58,11 +58,11 @@
                                         0, 'COMMA')}]]đ</span>
                                     [[${#numbers.formatInteger(item.course.discountedPrice, 0, 'COMMA')}]]đ
                                 </div>
-                                <form th:action="@{/cart/remove/{id}(id=${item.id})}" method="post">
-                                    <button type="submit" class="action-btn remove-btn">× Bỏ</button>
-                                </form>
                             </div>
-                        </div>
+                        </div>                        
+                        <form th:action="@{/cart/remove/{id}(id=${item.id})}" method="post">
+                            <button type="submit" class="action-btn remove-btn">× Bỏ</button>
+                        </form>
                     </div>
                 </div>
 
@@ -106,11 +106,11 @@
                                     th:src="@{/image/payment/momo_icon_square_pinkbg_RGB-1024x1024.png}"></div>
                             <div class="payment-label">MoMo</div>
                         </div>
-                        <div class="payment-method" data-method="bank">
+                        <!-- <div class="payment-method" data-method="bank">
                             <div class="payment-icon"><img
                                     th:src="@{/image/payment/vnpay-logo-vinadesign-25-12-57-55.jpg}"></div>
                             <div class="payment-label">VnPay</div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="payment-details active" id="card-payment">
@@ -180,10 +180,13 @@
                     }
                     const target = tab.getAttribute('data-tab');
                     tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
                     if (target === 'cart') {
                         tab.classList.add('active');
+                        tabContents[0].classList.add('active');
                     } else if (target === 'payment') {
                         tab.classList.add('active');
+                        tabContents[1].classList.add('active');
                     } 
 
                     const steps = document.querySelectorAll('.step');

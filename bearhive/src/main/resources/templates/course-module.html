@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BearHive - English Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/course-module.css}">
+</head>
+
+<body>
+    <div th:insert="~{header :: header}"></div>
+    <div class="container">
+        <div class="breadcrumb">
+            <a th:href="@{/home}">Home</a>
+            <span class="breadcrumb-separator">›</span>
+            <a th:href="@{/mycourse/{id}(id=${user.id})}">My Courses</a>
+            <span class="breadcrumb-separator">›</span>
+            <span>[[${course.title}]]</span>
+        </div>
+
+        <div class="course-header">
+            <div class="course-title-container">
+                <span class="course-category" th:text="${course.category}">Category</span>
+                <h1 class="course-title" th:text="${course.title}">Title</h1>
+                <p class="course-subtitle" th:text="${course.description}">Des</p>
+                <div class="course-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">📚</span>
+                        <span>[[${moduleCount}]] modules • [[${lessonCount}]] lessons</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🕒</span>
+                        <span th:text="${#numbers.formatInteger(T(java.lang.Math).ceil(totalDuration / 60.0), 0)} + ' giờ học'"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="course-progress">
+            <p>Your Progress: [[${progress}]]% Complete</p>
+            <div class="progress-container">
+                <div class="progress-bar" th:style="'width:' + ${progress} + '%'"></div>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <div class="nav-tab active" data-tab="curriculum">Chương trình học</div>
+        </div>
+        <div id="curriculum" class="tab-content active">
+            <div class="course-content-section" th:each="module, moduleStat : ${modules}">
+                <!-- Module  -->
+                <div class="module-card active">
+                    <div class="module-header">
+                        <div class="module-title-section">
+                            <h3 class="module-title">Module [[${moduleStat.index + 1}]]: [[${module.title}]]</h3>
+                            <div class="module-meta">
+                                <span th:text="${#lists.size(module.lessons)} + ' lessons'"></span>
+                                <span th:text="${module.duration} + ' minutes'"></span>
+                            </div>
+                        </div>
+                        <div class="module-progress">
+                            <span
+                                th:text="${module.lessonCount} + '/' + ${#lists.size(module.lessons)} + ' completed'"></span>
+                            <div class="module-progress-bar">
+                                <div class="module-progress-fill" th:style="'width:' + (${#lists.size(module.lessons)} > 0 ? (${module.lessonCount} * 100 / ${#lists.size(module.lessons)}) : 0) + '%'"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="module-content">                        
+                        <div class="lesson-item" th:each="lesson, lessonStat : ${module.lessons}">
+                            <div class="lesson-status" th:classappend="${lesson.completed} ? 'completed' : ''" th:text="${lesson.completed} ? '✓' : '○'"></div>
+                            <div class="lesson-info">
+                                <a th:href="@{/course/{courseId}/lessons/{lessonId}(courseId=${course.id}, lessonId=${lesson.id})}" class="lesson-title">
+                                    Lesson [[${lessonStat.index + 1}]]: [[${lesson.title}]]
+                                    <span class="lesson-type">Video</span>
+                                </a>
+                            </div>
+                            <div class="lesson-meta">
+                                <div class="lesson-duration">
+                                    <i class="fa fa-clock-o"></i>
+                                    <span th:text="${lesson.duration} + ' min'"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const moduleHeaders = document.querySelectorAll('.module-header');
+            moduleHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const moduleCard = header.parentElement;
+                    moduleCard.classList.toggle('active');
+                });
+            });
+        });
+    </script>
+    <script th:src="@{/js/header.js}"></script>
+</body>
+
+</html>

@@ -83,15 +83,13 @@ public class CartController {
                            Principal principal,
                            RedirectAttributes redirectAttributes) {
         try {
-            // Convert comma-separated course IDs to List<Long>
             List<Long> courseIdsList = Arrays.stream(selectedCourseIds.split(","))
                     .map(Long::parseLong)
                     .collect(Collectors.toList());
             
-            // Get current user ID from Principal
             Long userId = userCourseService.getUserIdFromPrincipal(principal);
             
-            // Call MomoService to create payment request
+            // Call MomoService 
             String response = momoService.createPaymentRequest(totalAmount, userId, courseIdsList);
             
             // Parse payment URL from MoMo response
@@ -110,24 +108,23 @@ public class CartController {
         }
     }
     
-    // Handle MoMo redirect after payment
+    // MoMo redirect after payment
     @GetMapping("/confirmation")
     public String confirmPayment(@RequestParam(value = "orderId", required = false) String orderId,
                                  @RequestParam(value = "resultCode", required = false) String resultCode,
                                  RedirectAttributes redirectAttributes, Model model) {
         try {
             if (orderId != null && resultCode != null) {
-                // Process based on result code
                 switch (resultCode) {
                     case "0":
-                        // Payment successful, check status to confirm
+                        // Payment successful
                         String statusResponse = momoService.checkPaymentStatus(orderId);
                         try{
                         JSONObject jsonResponse = new JSONObject(statusResponse);
                         
                         if (jsonResponse.has("resultCode") && jsonResponse.getInt("resultCode") == 0) {
                             redirectAttributes.addFlashAttribute("success", "Thanh toán thành công! Các khóa học của bạn đã sẵn sàng.");
-                            // Update payment status to SUCCESS
+                            // Update status SUCCESS
                             String transId = jsonResponse.has("transId") ? String.valueOf(jsonResponse.get("transId")) : "";
                             momoService.updatePaymentStatus(orderId, "SUCCESS", transId);
                             model.addAttribute("success", "Thanh toán thành công! Các khóa học của bạn đã sẵn sàng.");
@@ -135,6 +132,7 @@ public class CartController {
                             model.addAttribute("bill", bill);
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
                             model.addAttribute("createdAtFormatted", bill.getCreatedAt().format(formatter));
+                            model.addAttribute("user", bill.getUser());
                             return "confirmation"; 
                         } else {
                             redirectAttributes.addFlashAttribute("error", "Xác minh thanh toán thất bại. Vui lòng liên hệ hỗ trợ.");
@@ -177,10 +175,10 @@ public class CartController {
             redirectAttributes.addFlashAttribute("error", "Lỗi xử lý xác nhận thanh toán: " + e.getMessage());
         }
         
-        return "redirect:/cart"; // Redirect back to cart if error, otherwise to my-courses
+        return "redirect:/cart"; 
     }
     
-    // Handle MoMo IPN (Instant Payment Notification)
+    // MoMo IPN 
     @PostMapping("/momo-notify")
     public ResponseEntity<String> momoNotify(@RequestBody String requestBody) {
         try {

@@ -27,5 +27,5 @@ public class Course {
     private String lastUpdated;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<CourseModule> modules;
+    private List<CourseModule> courseModules;
 }

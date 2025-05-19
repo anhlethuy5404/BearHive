@@ -211,13 +211,13 @@ public class MomoService {
             bill.setMomoTransactionId(transactionId);
             billRepository.save(bill);
             
-            // Update all UserCourse records linked to this bill
+            // Update UserCourse linked to bill
             List<UserCourse> userCourses = userCourseRepository.findByBillId(bill.getId());
             for (UserCourse userCourse : userCourses) {
                 if ("SUCCESS".equals(status)) {
                     userCourse.setStatus("PURCHASED");
                 } else if ("CANCELLED".equals(status)) {
-                    userCourse.setStatus("CART"); // Return to cart if cancelled
+                    userCourse.setStatus("CART"); 
                 } else {
                     userCourse.setStatus(status);
                 }

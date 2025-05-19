@@ -1,99 +1,127 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>BearHive - English Practice</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" th:href="@{/css/course-content.css}">
-    </head>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BearHive - English Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/course-content.css}">
+</head>
+
 <body>
-</body>
-<div class="container">
-    <div class="breadcrumb">
-        <a href="#">Home</a>
-        <span class="breadcrumb-separator">›</span>
-        <a href="#">My Courses</a>
-        <span class="breadcrumb-separator">›</span>
-        <a href="#">IELTS Academic Mastery</a>
-        <span class="breadcrumb-separator">›</span>
-        <span>Lesson 3: Note-taking Techniques</span>
-    </div>
-
-    <div class="lesson-header">
-        <h1 class="lesson-title">Lesson 3: Note-taking Techniques for Complex Lectures</h1>
-        <p class="lesson-subtitle">Master advanced strategies to efficiently capture key information during IELTS Listening Section 4</p>
-        <div class="lesson-meta">
-            <div class="meta-item">
-                <span class="meta-icon">📊</span>
-                <span>Module 2: Listening Mastery</span>
-            </div>
-            <div class="meta-item">
-                <span class="meta-icon">🕒</span>
-                <span>18 minutes</span>
-            </div>
+    <div th:insert="~{header :: header}"></div>
+    <div class="container">
+        <div class="breadcrumb">
+            <a th:href="@{/home}">Home</a>
+            <span class="breadcrumb-separator">›</span>
+            <a th:href="@{/mycourse/{id}(id=${user.id})}">My Courses</a>
+            <span class="breadcrumb-separator">›</span>
+            <a th:href="@{/course/content/{id}(id=${course.id})}">[[${course.title}]]</a>
+            <span class="breadcrumb-separator">›</span>
+            <span>Lesson [[${currentLessonIndex} + 1]]: [[${lesson.title}]]</span>
         </div>
-    </div>
 
-    <div class="lesson-content">
-        <div class="main-content">
-            <div class="video-container">
-                <div class="video-player" id="video-player">
-                    <!-- Video would be loaded here with JavaScript -->
-                    <!-- Using a placeholder black background for now -->
+        <div class="lesson-header">
+            <h1 class="lesson-title">Lesson [[${currentLessonIndex} + 1]]: [[${lesson.title}]]</h1>
+            <div class="lesson-meta">
+                <div class="meta-item">
+                    <span class="meta-icon">📊</span>
+                    <span>Module [[${currentModuleIndex} + 1]]: [[${module.title}]]</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">🕒</span>
+                    <span>[[${lesson.duration}]] phút</span>
                 </div>
             </div>
-
-            <div class="lesson-navigation">
-                <button class="lesson-nav-btn">
-                    <span>←</span>
-                    <span>Previous: Predicting Content and Answers</span>
-                </button>
-                <button class="lesson-nav-btn lesson-next-btn">
-                    <span>Next: Handling Different Question Types</span>
-                    <span>→</span>
-                </button>
-            </div>
         </div>
 
-        <div class="sidebar">
-            <div class="sidebar-card">
-                <h3 class="section-title">Course Progress</h3>
-                <div class="course-progress">
-                    <p>Module 2: Listening Mastery (3/12 completed)</p>
-                    <div class="progress-container">
-                        <div class="progress-bar" style="width: 25%;"></div>
+        <div class="lesson-content">
+            <div class="main-content">
+                <div class="video-container">
+                    <div class="video-player" id="video-player" th:if="${lesson.youtubeVideoId}">
+                        <iframe width="760" height="428"
+                            th:src="'https://www.youtube.com/embed/' + ${lesson.youtubeVideoId}"
+                            title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div th:unless="${lesson.youtubeVideoId}">
+                        <p>No video available for this lesson.</p>
                     </div>
                 </div>
-                <ul class="lesson-list">
-                    <li class="lesson-item completed">
-                        <span class="lesson-status">✓</span>
-                        <span class="lesson-name">1: Advanced Listening Strategies</span>
-                        <span class="lesson-duration">15 min</span>
-                    </li>
-                    <li class="lesson-item completed">
-                        <span class="lesson-status">✓</span>
-                        <span class="lesson-name">2: Predicting Content and Answers</span>
-                        <span class="lesson-duration">12 min</span>
-                    </li>
-                    <li class="lesson-item current">
-                        <span class="lesson-status">▶</span>
-                        <span class="lesson-name">3: Note-taking Techniques</span>
-                        <span class="lesson-duration">18 min</span>
-                    </li>
-                    <li class="lesson-item">
-                        <span class="lesson-status">○</span>
-                        <span class="lesson-name">4: Handling Different Question Types</span>
-                        <span class="lesson-duration">20 min</span>
-                    </li>
-                    <li class="lesson-item locked">
-                        <span class="lesson-status">🔒</span>
-                        <span class="lesson-name">5: Understanding Accents</span>
-                        <span class="lesson-duration">15 min</span>
-                    </li>
-                </ul>
+
+                <div class="lesson-navigation">
+                    <button class="lesson-nav-btn" th:if="${previousLesson}">
+                        <a th:href="@{/course/{courseId}/lessons/{lessonId}(courseId=${course.id}, lessonId=${lesson.id})}"
+                            th:onclick="'window.location.href=\'' + @{/course/{courseId}/lessons/{lessonId}(courseId=${course.id}, lessonId=${previousLesson.id})} + '\''">
+                            ← Previous
+                        </a>
+                    </button>
+                    <button class="lesson-nav-btn" th:unless="${previousLesson}" disabled
+                        style="opacity:0.5;cursor:not-allowed;">
+                        ← Previous
+                    </button>
+                    <button class="lesson-nav-btn lesson-next-btn" th:if="${nextLesson}">
+                        <a th:href="@{/course/{courseId}/lessons/{lessonId}(courseId=${course.id}, lessonId=${lesson.id})}"
+                            th:onclick="'window.location.href=\'' + @{/course/{courseId}/lessons/{lessonId}(courseId=${course.id}, lessonId=${nextLesson.id})} + '\''">
+                            Next →
+                        </a>
+                    </button>
+                    <button class="lesson-nav-btn lesson-next-btn" th:unless="${nextLesson}" disabled
+                        style="opacity:0.5;cursor:not-allowed;">
+                        Next →
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="sidebar-card">
+                    <h3 class="section-title">Tiến trình học</h3>                    
+                    <div class="course-progress">
+                        <p
+                            th:text="'Module ' + ${currentModuleIndex + 1} + ': ' + ${module.title} + ' (' + ${completedLessons} + '/' + ${totalLessons} + ' completed)'">
+                            Module Progress</p>
+                        <div class="progress-container">
+                            <div class="progress-bar" th:style="'width: ' + ${progressPercentage} + '%;'"></div>
+                        </div>
+                    </div>
+                    <div th:each="module : ${course.courseModules}">
+                    <ul class="lesson-list">
+                        <li class="lesson-item completed">
+                            <span class="lesson-status">✓</span>
+                            <span class="lesson-name">1: Advanced Listening Strategies</span>
+                            <span class="lesson-duration">15 min</span>
+                        </li>
+                        <li class="lesson-item completed">
+                            <span class="lesson-status">✓</span>
+                            <span class="lesson-name">2: Predicting Content and Answers</span>
+                            <span class="lesson-duration">12 min</span>
+                        </li>
+                        <li class="lesson-item current">
+                            <span class="lesson-status">▶</span>
+                            <span class="lesson-name">3: Note-taking Techniques</span>
+                            <span class="lesson-duration">18 min</span>
+                        </li>
+                        <li class="lesson-item">
+                            <span class="lesson-status">○</span>
+                            <span class="lesson-name">4: Handling Different Question Types</span>
+                            <span class="lesson-duration">20 min</span>
+                        </li>
+                        <li class="lesson-item locked">
+                            <span class="lesson-status">○</span>
+                            <span class="lesson-name">5: Understanding Accents</span>
+                            <span class="lesson-duration">15 min</span>
+                        </li>
+                    </ul>                        
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <script th:src="@{/js/header.js}"></script>
+</body>
+
 </html>

@@ -60,7 +60,7 @@
                         <span id="invoice-total">[[${#numbers.formatInteger(bill.totalAmount, 0, 'COMMA')}]]đ</span>
                     </div>
                 </div>
-                <button class="btn btn-primary checkout-btn">Xem khóa học của tôi</button>
+                <button class="btn btn-primary checkout-btn" th:onclick="'window.location.href=\'/mycourse/' + ${user.id} + '\';'">Xem khóa học của tôi</button>
             </div>
             <div class="tab-content" th:if="${error}">
                 <div class="error-icon">✗</div>

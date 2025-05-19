@@ -10,6 +10,7 @@
     --border: #E5E7EB;
     --success: #10B981;
     --error: #EF4444;
+    --error-dark: #B91C1C;
     --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -181,23 +182,25 @@ input[type="checkbox"]:checked::after {
 }
 
 .action-btn {
-    background: none;
+    background: var(--error);
     border: none;
+    border-radius: 6px;
+    padding: 10px 17px;
     cursor: pointer;
-    color: var(--text-light);
-    font-size: 14px;
+    color: var(--background-light);
+    font-size: 16px;
     display: flex;
     align-items: center;
     gap: 5px;
-    transition: color 0.2s;
+    transition: background 0.2s;
 }
 
-.action-btn:hover {
+/* .action-btn:hover {
     color: var(--accent);
-}
+} */
 
 .remove-btn:hover {
-    color: var(--error);
+    background-color: var(--error-dark);
 }
 
 .summary-item {

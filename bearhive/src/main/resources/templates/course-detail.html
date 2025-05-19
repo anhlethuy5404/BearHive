@@ -40,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="course-price-container">
+                <div class="course-price-container" th:if="${userCourse == null}">
                     <div class="price-tag">
                         <span class="original-price">[[${course.originalPrice}]]đ</span>
                         [[${course.discountedPrice}]]đ
@@ -56,6 +56,11 @@
                         </form>
                     </th:block>
                     <a th:unless="${isLoggedIn}" onclick="showLoginModal()" class="btn btn-cart">Cho vào giỏ hàng</a>
+                </div>
+                <div class="course-price-container" th:if="${userCourse != null}">
+                    <span class="price-tag">Bạn đã đăng ký khóa học này</span>
+                    <p class="price-note">Bạn có thể truy cập khóa học ngay bây giờ</p>
+                    <a th:href="@{/course/content/{id}(id=${course.id})}" class="btn btn-accent">Truy cập ngay</a>
                 </div>
             </div>
             <img th:src="${course.imageUrl}" class="course-image">

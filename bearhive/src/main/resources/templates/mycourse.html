@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BearHive - English Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/mycourse.css}">
+</head>
+
+<body>
+    <div th:insert="~{header :: header}"></div>
+    <div class="mycourse-container">
+        <h1 class="mycourse-title">Khóa học của tôi</h1>
+
+        <div class="course-list">
+            <div th:each="course : ${purchasedCourses}" class="course-item">
+                <img th:src="${course.imageUrl}" th:alt="${course.title}" class="course-image">
+                <div class="course-details">
+                    <h3 th:text="${course.title}" class="course-title"></h3>
+                    <p th:text="${course.description}" class="course-description"></p>
+                    <a th:href="@{/course/content/{id}(id=${course.id})}" class="course-access-btn">Truy cập khóa học</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="empty-courses" th:if="${#lists.isEmpty(purchasedCourses)}">
+            Bạn chưa mua khóa học nào. <a href="/courses">Khám phá các khóa học</a>.
+        </div>
+    </div>
+    <script th:src="@{../js/header.js}"></script>
+</body>
+
+</html>

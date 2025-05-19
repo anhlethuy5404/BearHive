@@ -22,9 +22,9 @@ public class Lesson {
     private Long id;
 
     private String title;
-    private String duration;
+    private Long duration;
     private String youtubeVideoId;
-    private Boolean completed;
+    private Long completedCount = 0L;
 
     @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
     @JoinColumn(name= "course_module_id")
