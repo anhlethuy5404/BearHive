@@ -79,7 +79,8 @@
 
             <div class="sidebar">
                 <div class="sidebar-card">
-                    <h3 class="section-title">Tiến trình học</h3>                    
+                    <h3 class="section-title">Tiến trình học</h3>    
+                       <div th:each="module : ${course.courseModules}"></div>             
                     <div class="course-progress">
                         <p
                             th:text="'Module ' + ${currentModuleIndex + 1} + ': ' + ${module.title} + ' (' + ${completedLessons} + '/' + ${totalLessons} + ' completed)'">
@@ -88,14 +89,14 @@
                             <div class="progress-bar" th:style="'width: ' + ${progressPercentage} + '%;'"></div>
                         </div>
                     </div>
-                    <div th:each="module : ${course.courseModules}">
+                    
                     <ul class="lesson-list">
                         <li class="lesson-item completed">
                             <span class="lesson-status">✓</span>
-                            <span class="lesson-name">1: Advanced Listening Strategies</span>
-                            <span class="lesson-duration">15 min</span>
+                            <span class="lesson-name">1: Xử lý part 7 phần khó đoạn đôi</span>
+                            <span class="lesson-duration">90 min</span>
                         </li>
-                        <li class="lesson-item completed">
+                        <!-- <li class="lesson-item completed">
                             <span class="lesson-status">✓</span>
                             <span class="lesson-name">2: Predicting Content and Answers</span>
                             <span class="lesson-duration">12 min</span>
@@ -114,7 +115,7 @@
                             <span class="lesson-status">○</span>
                             <span class="lesson-name">5: Understanding Accents</span>
                             <span class="lesson-duration">15 min</span>
-                        </li>
+                        </li> -->
                     </ul>                        
                     </div>
                 </div>

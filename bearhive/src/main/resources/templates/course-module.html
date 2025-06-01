@@ -72,7 +72,7 @@
 
                     <div class="module-content">                        
                         <div class="lesson-item" th:each="lesson, lessonStat : ${module.lessons}">
-                            <div class="lesson-status" th:classappend="${lesson.completed} ? 'completed' : ''" th:text="${lesson.completed} ? '✓' : '○'"></div>
+                            <!-- <div class="lesson-status" th:classappend="${lesson.completed} ? 'completed' : ''" th:text="${lesson.completed} ? '✓' : '○'"></div> -->
                             <div class="lesson-info">
                                 <a th:href="@{/course/{courseId}/lessons/{lessonId}(courseId=${course.id}, lessonId=${lesson.id})}" class="lesson-title">
                                     Lesson [[${lessonStat.index + 1}]]: [[${lesson.title}]]

@@ -64,8 +64,10 @@ public class PDFController {
         document.add(title);
 
         document.add(new Paragraph("Mã hóa đơn: " + bill.getBillCode(), font));
-        document.add(new Paragraph("Hình thức thanh toán: MOMO", font)); //sau này thêm vnpay thì sửa
-        document.add(new Paragraph("Mã hóa đơn MOMO: " + bill.getOrderId(), font));
+        String paymentMethod = bill.getOrderId().contains("VNPAY") ? "VNPay" : "MOMO";
+        document.add(new Paragraph("Hình thức thanh toán: " + paymentMethod, font));
+        String transactionLabel = bill.getOrderId().contains("VNPAY") ? "Mã hóa đơn VNPay" : "Mã hóa đơn MOMO";
+        document.add(new Paragraph(transactionLabel + ": " + bill.getOrderId(), font));
         document.add(new Paragraph("Ngày: " + bill.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), font));
         document.add(new Paragraph("Khách hàng: " + bill.getUser().getFullname(), font));
         document.add(new Paragraph(" ", font)); 

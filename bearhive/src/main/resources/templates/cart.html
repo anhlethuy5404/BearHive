@@ -59,7 +59,7 @@
                                     [[${#numbers.formatInteger(item.course.discountedPrice, 0, 'COMMA')}]]đ
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
                         <form th:action="@{/cart/remove/{id}(id=${item.id})}" method="post">
                             <button type="submit" class="action-btn remove-btn">× Bỏ</button>
                         </form>
@@ -82,12 +82,12 @@
                         <span id="total">0đ</span>
                     </div>
 
-                    <div class="coupon-section">
+                    <!-- <div class="coupon-section">
                         <form class="coupon-form">
                             <input type="text" class="coupon-input" placeholder="Nhập mã giảm giá">
                             <button type="submit" class="btn btn-sm btn-outline">Áp dụng</button>
                         </form>
-                    </div>
+                    </div> -->
 
                     <button class="btn btn-primary checkout-btn" id="proceed-to-payment-btn">Chuyển sang bước thanh
                         toán</button>
@@ -106,11 +106,11 @@
                                     th:src="@{/image/payment/momo_icon_square_pinkbg_RGB-1024x1024.png}"></div>
                             <div class="payment-label">MoMo</div>
                         </div>
-                        <!-- <div class="payment-method" data-method="bank">
+                        <div class="payment-method" data-method="bank">
                             <div class="payment-icon"><img
                                     th:src="@{/image/payment/vnpay-logo-vinadesign-25-12-57-55.jpg}"></div>
                             <div class="payment-label">VnPay</div>
-                        </div> -->
+                        </div>
                     </div>
 
                     <div class="payment-details active" id="card-payment">
@@ -187,7 +187,7 @@
                     } else if (target === 'payment') {
                         tab.classList.add('active');
                         tabContents[1].classList.add('active');
-                    } 
+                    }
 
                     const steps = document.querySelectorAll('.step');
                     steps.forEach(step => step.classList.remove('active'));
@@ -251,7 +251,7 @@
                 steps[0].classList.add('active');
             });
 
-            document.getElementById('complete-payment-btn').addEventListener('click', function () {
+            document.getElementById('complete-payment-btn').addEventListener('click', async function () {
                 // tabs.forEach(t => t.classList.remove('active'));
                 // tabContents.forEach(content => content.classList.remove('active'));
                 // document.querySelector('[data-tab="confirmation"]').classList.add('active');
@@ -266,6 +266,7 @@
                     return;
                 }
 
+                const selectedMethod = document.querySelector('.payment-method.selected').getAttribute('data-method');
                 const totalAmountText = document.querySelector('#payment #total').textContent;
                 const totalAmount = parseInt(totalAmountText.replace(/[,.đ]/g, ''));
 
@@ -274,10 +275,32 @@
                     selectedIds.push(checkbox.value);
                 });
 
-                document.getElementById('selectedCourseIds').value = selectedIds.join(',');
-                document.getElementById('totalAmount').value = totalAmount;
-
-                document.getElementById('payment-form').submit();
+                if (selectedMethod === 'bank') {
+                    // VNPAY
+                    try {
+                        const response = await fetch('/api/vnpay/create', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                amount: totalAmount,
+                                courseIds: selectedIds
+                            })
+                        });
+                        const paymentUrl = await response.text();
+                        if (response.ok) {
+                            window.location.href = paymentUrl;
+                        } else {
+                            alert(paymentUrl);
+                        }
+                    } catch (e) {
+                        alert('Có lỗi khi tạo thanh toán VNPAY!');
+                    }
+                } else {
+                    // MoMo
+                    document.getElementById('selectedCourseIds').value = selectedIds.join(',');
+                    document.getElementById('totalAmount').value = totalAmount;
+                    document.getElementById('payment-form').submit();
+                }
             });
 
             const removeButtons = document.querySelectorAll('.remove-btn');
