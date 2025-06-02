@@ -1,24 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" th:href="@{/css/styles_for_login.css}">
     <link rel="stylesheet" th:href="@{/css/login.css}">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
     <div class="message  success" th:if="${message!=null}">[[${message}]]</div>
     <div class="message error" th:if="${error!=null}">[[${error}]]</div>
+    <div class="message error" id="recaptchaError" style="display:none;"></div>
     <div class="form-container">
         <h2>Welcome Back</h2>
         <p>Please sign in to continue</p>
-        <form th:action="@{/login}" method="post">
+        <form th:action="@{/login}" method="post" onsubmit="return validateForm()">
             <label for="email">Email Address</label>
             <input name="email" type="email" id="email" placeholder="Enter your email" required>
 
             <label for="password">Password</label>
             <input name="password" type="password" id="password" placeholder="Enter your password" required>
+
+            <div class="g-recaptcha" th:attr="data-sitekey=${recaptchaSiteKey}"></div>
 
             <div class="form-footer">
                 <a href="/forgot">Forgot Password?</a>
@@ -36,5 +40,18 @@
 
     <script th:src="@{/js/background-patterns.js}"></script>
     <script th:src="@{/js/form-animations.js}"></script>
+    <script>
+        function validateForm() {
+            const response = grecaptcha.getResponse();
+            const errorDiv = document.getElementById('recaptchaError');
+            if (response.length === 0) {
+                errorDiv.textContent = 'Vui lòng xác nhận bạn không phải là robot!';
+                errorDiv.style.display = 'block';
+                return false;
+            }
+            errorDiv.style.display = 'none';
+            return true;
+        }
+    </script>
 </body>
 </html>
